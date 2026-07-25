@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1280" />
+<title>Resolved — Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  /* — Side-by-side stage. Both modes are visible at once, so we can't
+       drive body.mode-* — the StrategyScreen sets its own mode class on
+       its root. Stage is a neutral split (cream-tinted left, indigo right)
+       so each frame visually sits in its own world. */
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #F4F4FA;
+    background:
+      linear-gradient(180deg, #0B0820 0%, #050310 100%);
+    display: grid; place-items: center;
+    padding: 56px 24px; box-sizing: border-box;
+  }
+  /* Soft aurora bleed behind the dark frame; cream wash behind the light. */
+  .stage-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      /* left side — cream wash */
+      radial-gradient(40% 50% at 24% 50%, rgba(255,153,51,0.10), transparent 70%),
+      /* right side — saffron + lavender bloom */
+      radial-gradient(35% 45% at 76% 30%, rgba(255,153,51,0.22), transparent 72%),
+      radial-gradient(40% 45% at 76% 75%, rgba(155,138,255,0.20), transparent 72%);
+    filter: blur(40px);
+  }
+
+  .root {
+    position: relative; z-index: 1;
+    display: flex; gap: 56px; align-items: flex-start;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .frame-cluster {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .frame-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #F4F4FA;
+  }
+  .frame-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9933, #FFD93D);
+  }
+  .frame-label.is-light .dot {
+    background: linear-gradient(135deg, #FBF6EC, #E8DFCB);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.20);
+  }
+
+  .legend {
+    width: 320px; padding-top: 8px;
+    color: #C6C2DD;
+  }
+  .legend h2 {
+    font-size: 14px; font-weight: 700; margin: 0 0 4px;
+    letter-spacing: -0.01em; color: #F4F4FA;
+  }
+  .legend .lede {
+    font-size: 12px; line-height: 1.5; margin: 0 0 18px;
+  }
+  .legend h3 {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #8884AA;
+    margin: 0 0 8px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+  }
+  .legend dl { margin: 0; display: grid; gap: 8px; }
+  .legend dt {
+    font-size: 12px; font-weight: 600; color: #F4F4FA;
+    letter-spacing: -0.01em;
+  }
+  .legend dd {
+    margin: 2px 0 0; font-size: 12px; line-height: 1.5;
+  }
+  .legend .pick { color: #FFB85C; font-weight: 600; }
+  .legend code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,153,51,0.18);
+    color: #FFB85C;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .caption {
+    color: #8884AA; font-size: 12px;
+    margin-top: 4px; max-width: 380px; line-height: 1.5;
+    text-align: center;
+  }
+  .caption b { color: #F4F4FA; font-weight: 600; }
+  .caption a { color: #FFB85C; text-decoration: underline dashed; text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+  <div class="stage-aurora"></div>
+
+  <div class="root">
+    <!-- ─── Light frame ─── -->
+    <div class="frame-cluster">
+      <span class="frame-label is-light"><span class="dot"></span>Light mode</span>
+      <div id="frame-light"></div>
+    </div>
+
+    <!-- ─── Dark frame ─── -->
+    <div class="frame-cluster">
+      <span class="frame-label"><span class="dot"></span>Dark mode</span>
+      <div id="frame-dark"></div>
+    </div>
+
+    <!-- ─── Legend ─── -->
+    <aside class="legend">
+      <h2>UX picks, on the screen</h2>
+      <p class="lede">
+        Same component code, two themes. Inline rationale in
+        <code>strategy-screen.jsx</code> — search for <code>// — UX:</code>.
+      </p>
+
+      <h3>Q1 · Expanded layout</h3>
+      <dl>
+        <dt><span class="pick">Why? + chips</span>, instant swap</dt>
+        <dd>"Use this instead" button rejected — chips ARE the action.</dd>
+      </dl>
+
+      <h3>Q2 · Edited signal</h3>
+      <dl>
+        <dt><span class="pick">"edited"</span> pill, tap to revert</dt>
+        <dd>The tag IS the undo affordance — small revert icon spells it out.</dd>
+      </dl>
+
+      <h3>Q3 · Forecast row</h3>
+      <dl>
+        <dt><span class="pick">Larger, gradient number</span>, double-rule divider</dt>
+        <dd>Brief said "slightly smaller" — I went bigger. Forecast is the credibility moment; shrinking it buries the punchline. Pill says "FORECAST".</dd>
+        <dt>Pill word</dt>
+        <dd><span class="pick">FORECAST</span> — same calibration weather apps carry.</dd>
+        <dt>Number animation</dt>
+        <dd>None. Count-up trivializes the credibility moment.</dd>
+        <dt>Long-press tip</dt>
+        <dd>15 words exactly: directional · vendor-dependent · not a guarantee.</dd>
+      </dl>
+
+      <h3>Q4 · Order</h3>
+      <dl>
+        <dt><span class="pick">Channel → Tone → Legal → Demand → Forecast</span></dt>
+        <dd>Where → how → why → what → outcome. Narrative arc.</dd>
+      </dl>
+
+      <h3>Q5 · Accordion</h3>
+      <dl>
+        <dt><span class="pick">Yes</span> — one open at a time</dt>
+        <dd>Multi-open = competing reasoning paragraphs.</dd>
+      </dl>
+
+      <h3>Q6 · CTA</h3>
+      <dl>
+        <dt><span class="pick">"Draft the complaint" + sparkle</span></dt>
+        <dd>"My" overcommits; "Let's draft it" is vague.</dd>
+        <dt>Transition</dt>
+        <dd><span class="pick">Hold + sparkle ripple</span>, then route — 240ms.</dd>
+      </dl>
+
+      <h3>Q7 · Auto-collapse</h3>
+      <dl>
+        <dt><span class="pick">Never</span></dt>
+        <dd>User controls pace.</dd>
+      </dl>
+
+      <h3>Q8 · Animation</h3>
+      <dl>
+        <dt><span class="pick">200ms symmetric</span></dt>
+        <dd>Asymmetric expand/collapse reads as glitchy on mobile.</dd>
+      </dl>
+
+      <h3>Behavior</h3>
+      <dl>
+        <dt>Reset</dt><dd>Clears overrides only. Disabled when none.</dd>
+        <dt>Alt chip selection</dt><dd>Instant swap. "edited" tag confirms.</dd>
+        <dt>Reasoning length</dt><dd>2-sentence cap, enforced upstream.</dd>
+      </dl>
+    </aside>
+  </div>
+
+  <p class="caption" style="margin-top: 32px;">
+    <b>Resolved · Strategy (Screen 4 of 4).</b>
+    Both frames run the same <code>StrategyScreen</code> component — only the
+    <code>mode</code> prop differs. Try expanding a row, swapping an
+    alternative chip (the "edited" pill appears), then tapping it to revert.
+    <br />
+    <a href="Extracting.html">← Back to Extracting</a>
+  </p>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="strategy-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const onBack    = () => { window.location.href = 'Extracting.html'; };
+    const onSubmit  = () => { window.location.href = 'Your%20Move.html'; };
+
+    function Pair({ mode }) {
+      return (
+        <IOSDevice dark={mode === 'dark'} width={402} height={874}>
+          <StrategyScreen
+            mode={mode}
+            vendor="Swiggy"
+            onBack={onBack}
+            onSubmit={onSubmit}
+          />
+        </IOSDevice>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('frame-light')).render(<Pair mode="light" />);
+    ReactDOM.createRoot(document.getElementById('frame-dark')).render(<Pair mode="dark" />);
+  </script>
+</body>
+</html>

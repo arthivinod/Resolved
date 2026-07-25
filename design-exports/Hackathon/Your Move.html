@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1600" />
+<title>Resolved — Your Move</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #F4F4FA;
+    background: linear-gradient(180deg, #0B0820 0%, #050310 100%);
+    padding: 56px 24px 96px; box-sizing: border-box;
+  }
+  .stage-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(35% 30% at 20% 18%, rgba(255,153,51,0.22), transparent 70%),
+      radial-gradient(40% 35% at 80% 28%, rgba(155,138,255,0.20), transparent 72%),
+      radial-gradient(35% 28% at 50% 80%, rgba(255,153,51,0.12), transparent 72%);
+    filter: blur(40px);
+  }
+
+  .stage {
+    position: relative; z-index: 1;
+    max-width: 1500px; margin: 0 auto;
+  }
+  .row-title {
+    text-align: center; margin: 0 0 18px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #8884AA;
+  }
+  .row-title b {
+    color: #F4F4FA;
+    margin-right: 8px;
+    letter-spacing: 0.04em;
+  }
+  .row-title .pill {
+    display: inline-block; margin-left: 10px;
+    padding: 3px 8px; border-radius: 999px;
+    background: rgba(255,153,51,0.18); color: #FFB85C;
+    font-size: 9.5px; letter-spacing: 0.12em;
+  }
+  .row {
+    display: flex; gap: 48px; align-items: flex-start;
+    flex-wrap: wrap; justify-content: center;
+    margin-bottom: 56px;
+  }
+  .frame-cluster {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .frame-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #F4F4FA;
+  }
+  .frame-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9933, #FFD93D);
+  }
+  .frame-label.is-light .dot {
+    background: linear-gradient(135deg, #FBF6EC, #E8DFCB);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.20);
+  }
+
+  .caption {
+    color: #8884AA; font-size: 12px;
+    margin: 0 auto; max-width: 760px; line-height: 1.55;
+    text-align: center;
+  }
+  .caption b { color: #F4F4FA; font-weight: 600; }
+  .caption a { color: #FFB85C; text-decoration: underline dashed; text-underline-offset: 3px; }
+  .caption code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,153,51,0.18);
+    color: #FFB85C;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .legend {
+    max-width: 1100px; margin: 0 auto 40px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    color: #C6C2DD;
+  }
+  .legend .card {
+    padding: 14px 16px; border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .legend h3 {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #8884AA;
+    margin: 0 0 6px;
+  }
+  .legend p { margin: 0; font-size: 12px; line-height: 1.5; }
+  .legend p .pick { color: #FFB85C; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="stage-aurora"></div>
+
+  <div class="stage">
+    <!-- ── Row 1 — Letter (HERO) — dual mode ── -->
+    <p class="row-title"><b>Format 1</b> Letter <span class="pill">Hero · interactive</span></p>
+    <div class="row">
+      <div class="frame-cluster">
+        <span class="frame-label is-light"><span class="dot"></span>Light mode</span>
+        <div id="frame-letter-light"></div>
+      </div>
+      <div class="frame-cluster">
+        <span class="frame-label"><span class="dot"></span>Dark mode</span>
+        <div id="frame-letter-dark"></div>
+      </div>
+    </div>
+
+    <!-- ── Row 2 — Tweet · Call · Filing — single mode each ── -->
+    <p class="row-title"><b>Formats 2–4</b> Designed states</p>
+    <div class="row">
+      <div class="frame-cluster">
+        <span class="frame-label is-light"><span class="dot"></span>Tweet · light</span>
+        <div id="frame-tweet"></div>
+      </div>
+      <div class="frame-cluster">
+        <span class="frame-label"><span class="dot"></span>Call · dark</span>
+        <div id="frame-call"></div>
+      </div>
+      <div class="frame-cluster">
+        <span class="frame-label is-light"><span class="dot"></span>Filing · light</span>
+        <div id="frame-filing"></div>
+      </div>
+    </div>
+
+    <!-- ── Legend ── -->
+    <div class="legend">
+      <div class="card">
+        <h3>Q1 · Cursor</h3>
+        <p><span class="pick">Blinks during stream, disappears on complete.</span> Post-stream state reads as a finished document.</p>
+      </div>
+      <div class="card">
+        <h3>Q2 · Edit/Reword placement</h3>
+        <p><span class="pick">Inline pill buttons below the card.</span> ⋯ menus hide editorial controls; long-press is undiscoverable for first-time judges.</p>
+      </div>
+      <div class="card">
+        <h3>Q3 · Edit target</h3>
+        <p><span class="pick">Bottom sheet with textarea.</span> Inline-edit jumps layout; separate screen loses context.</p>
+      </div>
+      <div class="card">
+        <h3>Q4 · Regenerate</h3>
+        <p><span class="pick">Named-direction sheet.</span> Blind re-runs feel random. 4 directions cover ~90% of real edits.</p>
+      </div>
+      <div class="card">
+        <h3>Q5 · Corner bracket</h3>
+        <p><span class="pick">Top-left only.</span> Frame = decorative; signature mark = authorship without boxing.</p>
+      </div>
+      <div class="card">
+        <h3>Q6 · Format switcher</h3>
+        <p><span class="pick">None on screen.</span> Channel decided on Strategy; back chevron is one tap.</p>
+      </div>
+      <div class="card">
+        <h3>Q7 · CTAs by format</h3>
+        <p><span class="pick">"File now" · "Post tweet" · "Start call" · "Submit filing".</span> Each verb matches the medium's vocabulary.</p>
+      </div>
+      <div class="card">
+        <h3>Q8 · Helper line</h3>
+        <p>Verb first, then what we do after — same arc per format. <span class="pick">"escalation queued"</span> reads as machinery-already-running.</p>
+      </div>
+      <div class="card">
+        <h3>Reword label</h3>
+        <p><span class="pick">"Reword"</span>. Rejected "Regenerate" (jargon), "Try again" (implies failure), "New version" (bureaucratic).</p>
+      </div>
+      <div class="card">
+        <h3>Restore AI draft</h3>
+        <p>Hidden until <span class="pick">edited === true</span>. Dashed-underline link, --text-tertiary. Subtle, not tempting.</p>
+      </div>
+      <div class="card">
+        <h3>Streaming interrupt</h3>
+        <p><span class="pick">Tap-to-skip.</span> Respects user time; cinematic-dialogue convention.</p>
+      </div>
+      <div class="card">
+        <h3>CTA loading</h3>
+        <p>Pill morphs to inline spinner, label fades, 800ms hold, route. Keeps spatial anchor.</p>
+      </div>
+    </div>
+
+    <p class="caption">
+      <b>Resolved · Your move (Screen 5).</b>
+      All five frames run the same <code>YourMoveScreen</code> component;
+      only the <code>format</code> and <code>mode</code> props differ.
+      Try the hero: tap the streaming letter to skip, then <i>Edit</i> or
+      <i>Reword</i> (firmer / warmer / shorter / lean on the law).
+      Inline rationale at <code>// — UX:</code> in
+      <code>your-move-screen.jsx</code>.
+      <br />
+      <a href="Strategy.html">← Strategy</a>
+    </p>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="your-move-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const onBack   = () => { window.location.href = 'Strategy.html'; };
+    const onReset  = () => { window.location.href = 'Strategy.html'; };
+    const onSubmit = () => { window.location.href = 'Filed.html'; };
+
+    function Frame({ format, mode }) {
+      // The Letter card height varies across formats — fix the iOS frame
+      // height (874) so the design canvas stays aligned. Internal scroll
+      // handles overflow.
+      return (
+        <IOSDevice dark={mode === 'dark'} width={402} height={874}>
+          <YourMoveScreen
+            initialFormat={format}
+            mode={mode}
+            onBack={onBack}
+            onReset={onReset}
+            onSubmit={onSubmit}
+          />
+        </IOSDevice>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('frame-letter-light')).render(<Frame format="letter" mode="light" />);
+    ReactDOM.createRoot(document.getElementById('frame-letter-dark')).render( <Frame format="letter" mode="dark"  />);
+    ReactDOM.createRoot(document.getElementById('frame-tweet')).render(       <Frame format="tweet"  mode="light" />);
+    ReactDOM.createRoot(document.getElementById('frame-call')).render(        <Frame format="call"   mode="dark"  />);
+    ReactDOM.createRoot(document.getElementById('frame-filing')).render(      <Frame format="filing" mode="light" />);
+  </script>
+</body>
+</html>

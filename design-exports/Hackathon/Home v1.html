@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1200" />
+<title>Resolved — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  html, body {
+    margin: 0; padding: 0; background: #050507;
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #F4F4F8;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    display: grid;
+    place-items: center;
+    padding: 48px 24px;
+    box-sizing: border-box;
+  }
+  /* App-wide ambient background — page aurora bleeds beyond the phone frame
+     so the design feels embedded in its own world, not pasted on a slide. */
+  .stage-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(35% 30% at 20% 20%, rgba(255,77,143,0.10), transparent 70%),
+      radial-gradient(40% 35% at 80% 80%, rgba(107,31,179,0.12), transparent 75%);
+    filter: blur(40px);
+  }
+  .stage-vignette {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(80% 60% at 50% 50%, transparent 50%, rgba(0,0,0,0.65) 100%);
+  }
+  .root { position: relative; z-index: 1; display: flex; gap: 40px; align-items: flex-start; }
+  .caption {
+    color: #8A8A99; font-size: 12px; max-width: 280px;
+    margin-top: 16px; text-align: left; line-height: 1.5;
+  }
+  .caption b { color: #F4F4F8; font-weight: 600; }
+  .legend {
+    width: 260px; padding-top: 12px;
+  }
+  .legend h2 {
+    font-size: 14px; font-weight: 600; margin: 0 0 12px;
+    color: #F4F4F8; letter-spacing: -0.01em;
+  }
+  .legend ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .legend li {
+    font-size: 12px; line-height: 1.5; color: #8A8A99;
+    padding-left: 14px; position: relative;
+  }
+  .legend li::before {
+    content: ''; position: absolute; left: 0; top: 7px;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF4D8F, #6B1FB3);
+  }
+  .legend li b { color: #F4F4F8; font-weight: 600; }
+
+  /* ─── Token-bound keyframes ─── */
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); opacity: 0.55; }
+    50%      { transform: scale(1.06); opacity: 1; }
+  }
+  @keyframes orbRotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes auroraDrift {
+    0%   { transform: translate3d(-2%, 0, 0) scale(1); }
+    100% { transform: translate3d(2%, -3%, 0) scale(1.05); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.25); opacity: 0.7; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="stage-aurora"></div>
+  <div class="stage-vignette"></div>
+
+  <div class="root">
+    <div>
+      <div id="app"></div>
+      <p class="caption">
+        <b>Resolved — Home.</b> Mobile (iPhone), 420px content column.
+        Use the <b>Tweaks</b> panel to switch between user states.
+      </p>
+    </div>
+
+    <aside class="legend">
+      <h2>UX decisions on this screen</h2>
+      <ul>
+        <li><b>Single CTA.</b> "View my cases" lives in the bottom nav; a second button on Home would widen the intent funnel.</li>
+        <li><b>Stats below capabilities.</b> Numbers only land after the user understands what the product does.</li>
+        <li><b>Empty state = community stats.</b> A first-time user sees "₹14.2L recovered across users", never "₹0 recovered".</li>
+        <li><b>Personalization is a top strip.</b> Active-case status lives ABOVE the hero, never inside it — hero is identical for all three user types.</li>
+        <li><b>Notifications surface on Cases tab.</b> No top banners, no toasts on Home.</li>
+        <li><b>Pull-to-refresh.</b> Refreshes stats + active case status. The orb is the loading cue.</li>
+        <li><b>Onboarding hint = subhead.</b> No tooltip on the CTA — kills premium feel.</li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="home-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const DEFAULT_TWEAKS = /*EDITMODE-BEGIN*/{
+      "userState": "first-time"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [t, setTweak] = useTweaks(DEFAULT_TWEAKS);
+      return (
+        <>
+          <IOSDevice dark={true} width={402} height={874}>
+            <HomeScreen userState={t.userState} />
+          </IOSDevice>
+          <TweaksPanel title="Tweaks">
+            <TweakSection title="User state">
+              <TweakSelect
+                label="Visitor"
+                value={t.userState}
+                onChange={(v) => setTweak('userState', v)}
+                options={[
+                  { value: 'first-time',        label: 'First-time visitor' },
+                  { value: 'returning-idle',    label: 'Returning, no active case' },
+                  { value: 'returning-active',  label: 'Returning, active case' },
+                ]}
+              />
+              <p style={{
+                fontSize: 11, color: '#8A8A99', margin: '8px 2px 0', lineHeight: 1.5,
+              }}>
+                The hero block stays identical across all three. Only the
+                top strip and the stats card label/values change.
+              </p>
+            </TweakSection>
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+</body>
+</html>

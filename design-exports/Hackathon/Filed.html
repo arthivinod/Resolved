@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1280" />
+<title>Resolved — Filed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #F4F4FA;
+    background: linear-gradient(180deg, #0B0820 0%, #050310 100%);
+    display: grid; place-items: center;
+    padding: 56px 24px 96px; box-sizing: border-box;
+  }
+  .stage-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(38% 32% at 22% 22%, rgba(255,153,51,0.20), transparent 70%),
+      radial-gradient(40% 35% at 78% 60%, rgba(155,138,255,0.20), transparent 72%);
+    filter: blur(40px);
+  }
+
+  .root {
+    position: relative; z-index: 1;
+    display: flex; gap: 56px; align-items: flex-start;
+    flex-wrap: wrap; justify-content: center;
+    max-width: 1500px;
+  }
+  .frame-cluster {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .frame-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #F4F4FA;
+  }
+  .frame-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9933, #FFD93D);
+  }
+  .frame-label.is-light .dot {
+    background: linear-gradient(135deg, #FBF6EC, #E8DFCB);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.20);
+  }
+
+  .legend {
+    width: 320px; padding-top: 8px;
+    color: #C6C2DD;
+  }
+  .legend h2 {
+    font-size: 14px; font-weight: 700; margin: 0 0 4px;
+    letter-spacing: -0.01em; color: #F4F4FA;
+  }
+  .legend .lede {
+    font-size: 12px; line-height: 1.5; margin: 0 0 18px;
+  }
+  .legend h3 {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #8884AA;
+    margin: 0 0 8px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+  }
+  .legend dl { margin: 0; display: grid; gap: 8px; }
+  .legend dt {
+    font-size: 12px; font-weight: 600; color: #F4F4FA;
+    letter-spacing: -0.01em;
+  }
+  .legend dd {
+    margin: 2px 0 0; font-size: 12px; line-height: 1.5;
+  }
+  .legend .pick { color: #FFB85C; font-weight: 600; }
+  .legend code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,153,51,0.18);
+    color: #FFB85C;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .caption {
+    color: #8884AA; font-size: 12px;
+    margin: 28px auto 0; max-width: 760px; line-height: 1.55;
+    text-align: center;
+  }
+  .caption b { color: #F4F4FA; font-weight: 600; }
+  .caption a { color: #FFB85C; text-decoration: underline dashed; text-underline-offset: 3px; }
+  .caption code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,153,51,0.18);
+    color: #FFB85C;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="stage-aurora"></div>
+
+  <div class="root">
+    <div class="frame-cluster">
+      <span class="frame-label is-light"><span class="dot"></span>Light mode</span>
+      <div id="frame-light"></div>
+    </div>
+
+    <div class="frame-cluster">
+      <span class="frame-label"><span class="dot"></span>Dark mode</span>
+      <div id="frame-dark"></div>
+    </div>
+
+    <aside class="legend">
+      <h2>UX picks, on the screen</h2>
+      <p class="lede">
+        Inline rationale at <code>// — UX:</code> in
+        <code>filed-screen.jsx</code>. Both frames run the same component;
+        only the <code>mode</code> prop differs.
+      </p>
+
+      <h3>Q1 · Celebration</h3>
+      <dl>
+        <dt><span class="pick">Subtle orb pulse + green chip</span></dt>
+        <dd>Confetti is a category mismatch — this is a legal-adjacent product. Confident exhale, not fireworks.</dd>
+      </dl>
+
+      <h3>Q2 · Case ID</h3>
+      <dl>
+        <dt><span class="pick">Gradient text-clip on the # number only</span></dt>
+        <dd>"Case" stays solid · "#RV-00214" gradient. Names the unique ID without making the noun loud.</dd>
+      </dl>
+
+      <h3>Q3 · Node states</h3>
+      <dl>
+        <dt><span class="pick">Three states</span> — completed · next · pending</dt>
+        <dd>"Next" gets a thicker outline + saffron-soft halo. Rejected severity-color-coding — implies court is "scary".</dd>
+      </dl>
+
+      <h3>Q4 · Tap a step</h3>
+      <dl>
+        <dt><span class="pick">All tappable</span>, accordion expand</dt>
+        <dd>Brief offered "only completed" — but pending steps are the teaching moment: tap to see exactly what we'd do.</dd>
+      </dl>
+
+      <h3>Q5 · Connector line</h3>
+      <dl>
+        <dt><span class="pick">Solid above completed · dotted below</span></dt>
+        <dd>Past is solid. Future is provisional ("if needed").</dd>
+      </dl>
+
+      <h3>Q6 · Callout placement</h3>
+      <dl>
+        <dt><span class="pick">After the ladder</span></dt>
+        <dd>Ladder = evidence. Callout = conclusion drawn from it. Lead with the work, then the promise.</dd>
+      </dl>
+
+      <h3>Q7 · Primary CTA</h3>
+      <dl>
+        <dt><span class="pick">"See all my cases →"</span></dt>
+        <dd>Natural next step post-filing is the dashboard — not back-to-home.</dd>
+      </dl>
+
+      <h3>Q8 · Secondary</h3>
+      <dl>
+        <dt><span class="pick">"Or file another complaint"</span></dt>
+        <dd>Dashed underline · power-user path · names a real second intent.</dd>
+      </dl>
+
+      <h3>Callout microcopy</h3>
+      <dl>
+        <dt><span class="pick">"You do nothing. We watch for replies and fire the next step the moment it's due."</span></dt>
+        <dd>17 words. "fire" beats "trigger automatically" (action-verb gravity vs tech word); "the moment it's due" is a clock event, not a vague promise.</dd>
+      </dl>
+
+      <h3>Behavior</h3>
+      <dl>
+        <dt>Done</dt><dd>→ Home.</dd>
+        <dt>Case ID</dt><dd>Hardcoded RV-00214 for demo continuity.</dd>
+        <dt>Ladder data</dt><dd>Vendor-driven in production; Swiggy hardcoded here.</dd>
+      </dl>
+    </aside>
+  </div>
+
+  <p class="caption">
+    <b>Resolved · Filed (Screen 6 of 6).</b>
+    Both iPhone frames run the same <code>FiledScreen</code> component —
+    only <code>mode</code> differs. Tap any step to expand its detail
+    (completed shows real submission data; pending shows what fires
+    next).
+    <br />
+    <a href="Your Move.html">← Your move</a>
+  </p>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="filed-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const onDone        = () => { window.location.href = 'Home.html'; };
+    const onSeeCases    = () => { window.location.href = 'Cases.html'; };
+    const onFileAnother = () => { window.location.href = 'Capture.html'; };
+
+    function Frame({ mode }) {
+      return (
+        <IOSDevice dark={mode === 'dark'} width={402} height={874}>
+          <FiledScreen
+            mode={mode}
+            caseId="RV-00214"
+            vendor="Swiggy"
+            onDone={onDone}
+            onSeeCases={onSeeCases}
+            onFileAnother={onFileAnother}
+          />
+        </IOSDevice>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('frame-light')).render(<Frame mode="light" />);
+    ReactDOM.createRoot(document.getElementById('frame-dark')).render(<Frame mode="dark" />);
+  </script>
+</body>
+</html>

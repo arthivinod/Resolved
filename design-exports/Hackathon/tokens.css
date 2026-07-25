@@ -1,0 +1,145 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Resolved — design tokens
+   Mirror of design.md §3. CSS variables only — no hex anywhere else.
+   Light is the default. The .mode-dark class on a root flips the set.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root,
+.mode-light {
+  /* Base */
+  --bg-primary:      #FBF6EC;
+  --bg-surface:      #FFFFFF;
+  --bg-elevated:     #FBF6EC;
+  --border:          #E8DFCB;
+  --border-strong:   #D4C8AC;
+
+  /* Text */
+  --text-primary:    #1A1612;
+  --text-secondary:  #6A625A;
+  --text-tertiary:   #948975;
+
+  /* Brand accents */
+  --accent-saffron:        #C45F00;
+  --accent-saffron-bright: #FF7A1A;
+  --accent-saffron-soft:   rgba(255,153,51,0.08);
+  --accent-saffron-border: rgba(255,153,51,0.25);
+  --accent-trust:          #2E5BFF;
+  --accent-trust-soft:     rgba(46,91,255,0.08);
+  --accent-trust-border:   rgba(46,91,255,0.25);
+
+  /* Semantic */
+  --success:               #1B5E20;
+  --success-soft:          rgba(27,94,32,0.10);
+  --warning:               #B07900;
+  --warning-soft:          rgba(176,121,0,0.10);
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #FF7A1A 0%, #FF9933 100%);
+  --gradient-hero-text: linear-gradient(135deg, #FF7A1A 0%, #C45F00 100%);
+
+  /* Button text color: always high-contrast against saffron */
+  --on-accent: #FFFFFF;
+
+  /* Glow */
+  --glow-cta: 0 8px 24px rgba(255,122,26,0.35);
+  --glow-cta-hover: 0 10px 28px rgba(255,122,26,0.45);
+
+  /* Aurora (light mode is intentionally cream-only — no aurora) */
+  --aurora-1: transparent;
+  --aurora-2: transparent;
+}
+
+.mode-dark {
+  /* Base */
+  --bg-primary:      #07051A;
+  --bg-surface:      #110D2E;
+  --bg-elevated:     #1A1538;
+  --border:          #1E1A45;
+  --border-strong:   #2D2858;
+
+  /* Text */
+  --text-primary:    #F4F4FA;
+  --text-secondary:  #8884AA;
+  --text-tertiary:   #5A5680;
+
+  /* Brand accents */
+  --accent-saffron:        #FF9933;
+  --accent-saffron-bright: #FFB85C;
+  --accent-saffron-soft:   rgba(255,153,51,0.13);
+  --accent-saffron-border: rgba(255,153,51,0.35);
+  --accent-trust:          #9B8AFF;
+  --accent-trust-soft:     rgba(155,138,255,0.18);
+  --accent-trust-border:   rgba(155,138,255,0.35);
+
+  /* Semantic */
+  --success:               #84CC16;
+  --success-soft:          rgba(132,204,22,0.15);
+  --warning:               #FFB85C;
+  --warning-soft:          rgba(255,184,92,0.15);
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #FF9933 0%, #FFD93D 100%);
+  --gradient-hero-text: linear-gradient(135deg, #FFB85C 0%, #FFD93D 100%);
+
+  /* Dark-mode button text: deep indigo for high contrast on saffron-gold */
+  --on-accent: #07051A;
+
+  /* Glow */
+  --glow-cta: 0 8px 28px rgba(255,153,51,0.45);
+  --glow-cta-hover: 0 12px 36px rgba(255,153,51,0.55);
+
+  /* Ambient — dark mode only */
+  --aurora-1: radial-gradient(circle, rgba(255,153,51,0.33) 0%, transparent 70%);
+  --aurora-2: radial-gradient(circle, rgba(155,138,255,0.25) 0%, transparent 70%);
+}
+
+/* ─── Token-bound keyframes (referenced from components) ────────────────── */
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%      { transform: scale(1.05); opacity: 0.80; }
+}
+@keyframes auroraDrift {
+  0%   { transform: translate3d(-2%, 0,   0) scale(1.00); }
+  100% { transform: translate3d( 2%, -3%, 0) scale(1.05); }
+}
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1);    opacity: 1.0; }
+  50%      { transform: scale(1.25); opacity: 0.6; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes accordionBodyIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fieldIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes orbSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes sparkleRipple {
+  0%   { opacity: 0.6; transform: scale(0.4); }
+  100% { opacity: 0;   transform: scale(2.2); }
+}
+@keyframes cursorBlink {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1500" />
+<title>Resolved — Cases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #F4F4FA;
+    background: linear-gradient(180deg, #0B0820 0%, #050310 100%);
+    padding: 56px 24px 96px; box-sizing: border-box;
+  }
+  .stage-aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(36% 30% at 18% 18%, rgba(255,153,51,0.20), transparent 70%),
+      radial-gradient(40% 35% at 80% 65%, rgba(155,138,255,0.18), transparent 72%);
+    filter: blur(40px);
+  }
+
+  .stage {
+    position: relative; z-index: 1;
+    max-width: 1500px; margin: 0 auto;
+  }
+  .row-title {
+    text-align: center; margin: 0 0 18px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #8884AA;
+  }
+  .row-title b {
+    color: #F4F4FA;
+    margin-right: 8px;
+    letter-spacing: 0.04em;
+  }
+  .row-title .pill {
+    display: inline-block; margin-left: 10px;
+    padding: 3px 8px; border-radius: 999px;
+    background: rgba(255,153,51,0.18); color: #FFB85C;
+    font-size: 9.5px; letter-spacing: 0.12em;
+  }
+  .row {
+    display: flex; gap: 48px; align-items: flex-start;
+    flex-wrap: wrap; justify-content: center;
+    margin-bottom: 56px;
+  }
+  .frame-cluster {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .frame-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #F4F4FA;
+  }
+  .frame-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9933, #FFD93D);
+  }
+  .frame-label.is-light .dot {
+    background: linear-gradient(135deg, #FBF6EC, #E8DFCB);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.20);
+  }
+
+  .legend {
+    max-width: 1100px; margin: 0 auto 40px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    color: #C6C2DD;
+  }
+  .legend .card {
+    padding: 14px 16px; border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .legend h3 {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #8884AA;
+    margin: 0 0 6px;
+  }
+  .legend p { margin: 0; font-size: 12px; line-height: 1.5; }
+  .legend p .pick { color: #FFB85C; font-weight: 600; }
+
+  .caption {
+    color: #8884AA; font-size: 12px;
+    margin: 0 auto; max-width: 760px; line-height: 1.55;
+    text-align: center;
+  }
+  .caption b { color: #F4F4FA; font-weight: 600; }
+  .caption a { color: #FFB85C; text-decoration: underline dashed; text-underline-offset: 3px; }
+  .caption code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(255,153,51,0.18);
+    color: #FFB85C;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="stage-aurora"></div>
+
+  <div class="stage">
+    <!-- ── Row 1 — Populated dual ── -->
+    <p class="row-title"><b>Populated state</b> 5 staged cases · 5 industries</p>
+    <div class="row">
+      <div class="frame-cluster">
+        <span class="frame-label is-light"><span class="dot"></span>Light mode</span>
+        <div id="frame-light"></div>
+      </div>
+      <div class="frame-cluster">
+        <span class="frame-label"><span class="dot"></span>Dark mode</span>
+        <div id="frame-dark"></div>
+      </div>
+    </div>
+
+    <!-- ── Row 2 — Empty state ── -->
+    <p class="row-title"><b>Empty state</b> zero cases, never shows ₹0</p>
+    <div class="row">
+      <div class="frame-cluster">
+        <span class="frame-label"><span class="dot"></span>Dark mode</span>
+        <div id="frame-empty"></div>
+      </div>
+    </div>
+
+    <!-- ── Legend ── -->
+    <div class="legend">
+      <div class="card"><h3>Q1 · Stats</h3>
+        <p><span class="pick">Compact 2-col row.</span> Full card belongs on Home (stats = anchor); here they're context for the list.</p></div>
+      <div class="card"><h3>Q2 · Filter behavior</h3>
+        <p><span class="pick">Hide non-matches.</span> Standard filter. Fade-to-40% is a compare pattern.</p></div>
+      <div class="card"><h3>Q3 · Sectioning</h3>
+        <p><span class="pick">Only on "All".</span> When user filters to Won, a "RESOLVED" section is the filter shouting itself back.</p></div>
+      <div class="card"><h3>Q4 · Tap</h3>
+        <p><span class="pick">Detail screen</span> · only Swiggy wired (→ Filed). Others press-feedback only.</p></div>
+      <div class="card"><h3>Q5 · Swipe</h3>
+        <p><span class="pick">No.</span> Phase 2 — judges can't see in 90s.</p></div>
+      <div class="card"><h3>Q6 · Chip placement</h3>
+        <p><span class="pick">Bottom-left under subtitle.</span> Frees the right side for the amount; vendor name is the headline.</p></div>
+      <div class="card"><h3>Q7 · Amount</h3>
+        <p><span class="pick">Right-side, large, status-colored.</span> Bank-app convention: scan the column to find wins.</p></div>
+      <div class="card"><h3>Q8 · Empty state</h3>
+        <p>No stats. Small orb + "No cases yet" + "Resolved learns your vendors and tactics as you file. Start with one." + CTA.</p></div>
+      <div class="card"><h3>Q9 · Filters</h3>
+        <p><span class="pick">Status only.</span> Vendor-type / amount / time filters are enterprise inbox features.</p></div>
+      <div class="card"><h3>Q10 · Filter icon</h3>
+        <p><span class="pick">Removed.</span> Pill row IS the filter — single source of truth.</p></div>
+      <div class="card"><h3>Behavior · Pull to refresh</h3>
+        <p>Designed (orb cue). Not built in prototype iframe — desktop touch is unreliable.</p></div>
+      <div class="card"><h3>Behavior · Sort</h3>
+        <p>Active: <span class="pick">newest filed first.</span> Resolved: <span class="pick">most recent win first.</span></p></div>
+      <div class="card"><h3>Behavior · Sticky</h3>
+        <p><span class="pick">Filter pills only.</span> Pushed back on "compact heading on scroll" — moving parts add layout-shift risk.</p></div>
+      <div class="card"><h3>Behavior · Filter persist</h3>
+        <p><span class="pick">Reset to All</span> on revisit. Sticky filters quietly hide cases.</p></div>
+      <div class="card"><h3>Behavior · Case ID</h3>
+        <p>Not on cards. Vendor + amount carry identity; case ID lives on detail.</p></div>
+      <div class="card"><h3>Behavior · Urgency</h3>
+        <p><span class="pick">Saffron clock pill ("18h").</span> Never red — brand stays calm-authoritative.</p></div>
+      <div class="card"><h3>Status chip copy</h3>
+        <p><span class="pick">"In progress" / "Won" / "Escalated".</span> Rejected "Active" / "Live" / "Resolved".</p></div>
+      <div class="card"><h3>Stat sub copy</h3>
+        <p>"across 8 wins this year" / "of 240 lifetime cases" — time-scope on both for parallel rhythm.</p></div>
+    </div>
+  </div>
+
+  <p class="caption">
+    <b>Resolved · Cases (Screen 7).</b>
+    All three frames run the same <code>CasesScreen</code> component;
+    only <code>mode</code> and <code>empty</code> props differ.
+    Tap the <b>Swiggy</b> case to open Filed.html (the only wired detail
+    in the prototype). Try the filter pills — they hide non-matches and
+    drop the section labels.
+    <br />
+    <a href="Filed.html">← Filed</a> ·
+    <a href="Home.html">Home</a>
+  </p>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="cases-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const onOpenCase = (kase) => { window.location.href = 'Filed.html'; };
+    const onFileNew  = () => { window.location.href = 'Capture.html'; };
+    const onNav = (id) => {
+      if (id === 'home') window.location.href = 'Home.html';
+      if (id === 'new')  window.location.href = 'Capture.html';
+    };
+
+    function Frame({ mode, empty }) {
+      return (
+        <IOSDevice dark={mode === 'dark'} width={402} height={874}>
+          <CasesScreen
+            mode={mode}
+            empty={!!empty}
+            onOpenCase={onOpenCase}
+            onFileNew={onFileNew}
+            onNav={onNav}
+          />
+        </IOSDevice>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('frame-light')).render(<Frame mode="light" />);
+    ReactDOM.createRoot(document.getElementById('frame-dark')).render(<Frame mode="dark" />);
+    ReactDOM.createRoot(document.getElementById('frame-empty')).render(<Frame mode="dark" empty />);
+  </script>
+</body>
+</html>

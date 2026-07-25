@@ -1,0 +1,18 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 250ms ease, color 250ms ease;
+}
+button { font-family: inherit; }
+
+/* Demoted note field on Capture — muted placeholder per design.md voice rule */
+.note-field-demoted::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.5;
+}

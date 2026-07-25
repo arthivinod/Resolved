@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1280" />
+<title>Resolved — Capture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-primary);
+    display: grid; place-items: center;
+    padding: 48px 24px; box-sizing: border-box;
+    transition: color 250ms ease;
+  }
+  .stage-base {
+    position: fixed; inset: 0; z-index: -1;
+    background: var(--bg-primary);
+  }
+  .stage-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .stage-bg .light-paper {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(60% 50% at 50% 30%, rgba(255,153,51,0.05), transparent 70%),
+      radial-gradient(80% 60% at 50% 100%, rgba(46,91,255,0.04), transparent 75%);
+  }
+  .stage-bg .dark-aurora {
+    position: absolute; inset: 0; opacity: 0;
+    background:
+      radial-gradient(38% 32% at 20% 20%, rgba(255,153,51,0.25), transparent 70%),
+      radial-gradient(42% 36% at 80% 70%, rgba(155,138,255,0.22), transparent 72%);
+    filter: blur(40px);
+    transition: opacity 250ms ease;
+  }
+  .stage-bg .dark-vignette {
+    position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(75% 60% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%);
+    transition: opacity 250ms ease;
+  }
+  body.mode-dark .dark-aurora,
+  body.mode-dark .dark-vignette { opacity: 1; }
+  body.mode-dark .light-paper   { opacity: 0; }
+
+  .root {
+    position: relative; z-index: 1;
+    display: flex; gap: 48px; align-items: flex-start;
+    max-width: 1100px;
+  }
+  .legend { width: 300px; padding-top: 8px; }
+  .legend h2 {
+    font-size: 13px; font-weight: 700; margin: 0 0 4px;
+    letter-spacing: -0.01em; color: var(--text-primary);
+  }
+  .legend .lede {
+    font-size: 12px; line-height: 1.5;
+    color: var(--text-secondary); margin: 0 0 18px;
+  }
+  .legend h3 {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin: 0 0 8px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .legend dl { margin: 0; display: grid; gap: 8px; }
+  .legend dt {
+    font-size: 12px; font-weight: 600; color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .legend dd {
+    margin: 2px 0 0; font-size: 12px; line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .legend dd .pick { color: var(--accent-saffron); font-weight: 600; }
+  body.mode-dark .legend .pick { color: var(--accent-saffron-bright); }
+  .legend code {
+    font-size: 11px; padding: 1px 5px; border-radius: 4px;
+    background: var(--accent-saffron-soft);
+    color: var(--accent-saffron);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .caption {
+    color: var(--text-secondary); font-size: 12px;
+    margin-top: 16px; max-width: 380px; line-height: 1.5;
+  }
+  .caption b { color: var(--text-primary); font-weight: 600; }
+  .caption a {
+    color: var(--accent-saffron); text-decoration: underline dashed;
+    text-underline-offset: 3px;
+  }
+</style>
+</head>
+<body class="mode-light">
+  <div class="stage-base"></div>
+  <div class="stage-bg">
+    <div class="light-paper"></div>
+    <div class="dark-aurora"></div>
+    <div class="dark-vignette"></div>
+  </div>
+
+  <div class="root">
+    <div>
+      <div id="app"></div>
+      <p class="caption">
+        <b>Resolved · Capture (Screen 2 of 4).</b>
+        Tap any card to expand. Use <b>Tweaks</b> to toggle mode, simulate
+        an extraction error, or open a card by default.
+        <br />
+        <a href="Home.html">← Back to Home</a>
+      </p>
+    </div>
+
+    <aside class="legend">
+      <h2>UX picks, on the screen</h2>
+      <p class="lede">
+        Inline rationale lives in <code>capture-screen.jsx</code> — search
+        for <code>// — UX:</code>. This panel maps every brief question to
+        the pick I made.
+      </p>
+
+      <h3>Q1 · Expand behavior</h3>
+      <dl>
+        <dt><span class="pick">Accordion</span> — one open at a time</dt>
+        <dd>Multi-open creates ambiguous commit-state and a 9-row buffet for stressed users.</dd>
+      </dl>
+
+      <h3>Q2 · Chevron + border</h3>
+      <dl>
+        <dt><span class="pick">180° in 200ms</span> · saffron border on expand</dt>
+        <dd>Same easing curve as Home's CTA press for motion-language continuity.</dd>
+      </dl>
+
+      <h3>Q3 · Sub-option tap</h3>
+      <dl>
+        <dt><span class="pick">Immediate</span> → Extracting</dt>
+        <dd>The OS picker IS the preview; the Extracting screen IS the confirm. A second step would burn demo time and contradict the "AI does the rest" promise.</dd>
+      </dl>
+
+      <h3>Q4 · Multi-file?</h3>
+      <dl>
+        <dt><span class="pick">Single only</span></dt>
+        <dd>Per anti-goals. Sub-option tap commits.</dd>
+      </dl>
+
+      <h3>Q5 · Extraction failure</h3>
+      <dl>
+        <dt><span class="pick">Inline, on the card</span></dt>
+        <dd>Toasts disappear; inline ties the message to the affordance that caused it. Tone: descriptive + actionable, never apologetic.</dd>
+      </dl>
+
+      <h3>Q6 · Note limit?</h3>
+      <dl>
+        <dt><span class="pick">Unlimited</span> · soft 280 hint</dt>
+        <dd>Counter appears at 200 chars, goes amber past 280. Never blocks.</dd>
+      </dl>
+
+      <h3>Q7 · Try-a-sample</h3>
+      <dl>
+        <dt><span class="pick">Dashed-underline text link</span> at the bottom</dt>
+        <dd>A chip competes with real cards; a floating button screams. Dashed = universal "demo / optional".</dd>
+      </dl>
+
+      <h3>Q8 · Preview after pick?</h3>
+      <dl>
+        <dt><span class="pick">No preview</span> — commit-on-tap</dt>
+        <dd>Preview = soft confirm dialog = anti-goal friction.</dd>
+      </dl>
+
+      <h3>Behavior</h3>
+      <dl>
+        <dt>Tap lift</dt><dd>Yes — scale(0.995) + bg lift to <code>--bg-elevated</code>.</dd>
+        <dt>Swipe-down inside card</dt><dd>Collapses (48px threshold). Tap header also collapses.</dd>
+        <dt>Auto-scroll on expand</dt><dd>Smooth scroll, card header settles 72px from top.</dd>
+        <dt>Keyboard on note focus</dt><dd>BottomNav slides down + fades — give the keyboard room.</dd>
+        <dt>Reset</dt><dd>Clear-and-stay. Back chevron handles "leave screen".</dd>
+        <dt>Loading after pick</dt><dd>160ms shimmer on the tapped row, then route.</dd>
+      </dl>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="capture-screen.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const DEFAULT_TWEAKS = /*EDITMODE-BEGIN*/{
+      "mode": "dark",
+      "errorState": "off",
+      "errorTarget": "document"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [t, setTweak] = useTweaks(DEFAULT_TWEAKS);
+
+      React.useEffect(() => {
+        document.body.classList.toggle('mode-dark', t.mode === 'dark');
+        document.body.classList.toggle('mode-light', t.mode !== 'dark');
+        document.documentElement.style.colorScheme = t.mode === 'dark' ? 'dark' : 'light';
+      }, [t.mode]);
+
+      const isDark = t.mode === 'dark';
+
+      const handlePick = ({ cardId, optId }) => {
+        // Route to Extracting screen. The "sample" pick from the
+        // Try-a-sample link also routes there (State A by default).
+        console.log('[Capture] commit →', { cardId, optId });
+        window.location.href = 'Extracting.html';
+      };
+
+      const handleBack = () => { window.location.href = 'Home.html'; };
+
+      return (
+        <>
+          <IOSDevice dark={isDark} width={402} height={874}>
+            <CaptureScreen
+              mode={t.mode}
+              showError={t.errorState === 'on'}
+              errorTarget={t.errorTarget}
+              onPick={handlePick}
+              onBack={handleBack}
+            />
+          </IOSDevice>
+
+          <TweaksPanel title="Tweaks">
+            <TweakSection title="Appearance">
+              <TweakRadio
+                label="Mode"
+                value={t.mode}
+                onChange={(v) => setTweak('mode', v)}
+                options={[
+                  { value: 'light', label: 'Light' },
+                  { value: 'dark',  label: 'Dark' },
+                ]}
+              />
+            </TweakSection>
+
+            <TweakSection title="Error state (Q5)">
+              <TweakRadio
+                label="Show extraction error"
+                value={t.errorState}
+                onChange={(v) => setTweak('errorState', v)}
+                options={[
+                  { value: 'off', label: 'Off' },
+                  { value: 'on',  label: 'On' },
+                ]}
+              />
+              <TweakSelect
+                label="On which card"
+                value={t.errorTarget}
+                onChange={(v) => setTweak('errorTarget', v)}
+                options={[
+                  { value: 'photo',    label: 'Photo card' },
+                  { value: 'document', label: 'Document card' },
+                  { value: 'email',    label: 'Email card' },
+                ]}
+              />
+              <p style={{
+                fontSize: 11, lineHeight: 1.5, margin: '8px 2px 0',
+                color: 'var(--text-secondary)',
+              }}>
+                Opens the relevant card and shows the inline error so you
+                can see tone + placement without uploading a real file.
+              </p>
+            </TweakSection>
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+</body>
+</html>
