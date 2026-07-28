@@ -7,6 +7,14 @@ channels until you're paid. *They have AI. Now you do too.*
 
 ---
 
+## Screenshots
+
+| Light | Dark |
+|---|---|
+| ![Home — light](design-exports/Hackathon/screenshots/home-after-light.png) | ![Home — dark](design-exports/Hackathon/screenshots/home-after-dark.png) |
+
+---
+
 ## Run
 
 ```bash
