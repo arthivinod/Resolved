@@ -19,6 +19,16 @@ It's not a chatbot that helps you phrase a nicer email. It's an agent that runs 
 
 ---
 
+## Why now
+
+India has 250–350M+ online shoppers, and quick-commerce's 10–15 minute delivery promise is generating complaints faster than anyone can review them. Almost none of those complaints go anywhere — the formal path (National Consumer Helpline → e-Daakhil → consumer court) is slow enough that courts are sitting on a backlog of hundreds of thousands of cases, some taking years to close.
+
+Meanwhile companies are quietly automating the other side: AI chatbots built to stall and deflect at scale. That's the asymmetry Resolved exists to close — for now, only one side of this fight has AI.
+
+The model isn't unproven, just unbuilt here. Voxya already runs a paid, human-powered version of this in India. DoNotPay proved "AI fights bureaucracy for you" as a business in the US. Nobody's built the AI-native version for Indian consumer law yet.
+
+---
+
 ## How it works
 
 1. **Extract.** Drop in a photo, screenshot, or forwarded email. Claude's vision model pulls the vendor, order ID, amount, issue, severity, and timestamp straight off the evidence — no forms, no formatting rules.
