@@ -358,7 +358,7 @@ const CARDS = [
   },
 ];
 
-export default function CaptureScreen({ mode = 'light', onNavigate = () => {} }) {
+export default function CaptureScreen({ mode = 'light', onNavigate = () => {}, onSwapEvidence = () => {} }) {
   const [openId, setOpenId] = useState(null);
   const [note, setNote] = useState('');
   const [loadingPick, setLoadingPick] = useState(null);
@@ -391,6 +391,7 @@ export default function CaptureScreen({ mode = 'light', onNavigate = () => {} })
     setLoadingPick(_optId);
     setTimeout(() => {
       setLoadingPick(null);
+      onSwapEvidence(_optId);
       onNavigate('extracting');
     }, 160);
   };
@@ -481,7 +482,7 @@ export default function CaptureScreen({ mode = 'light', onNavigate = () => {} })
         </section>
 
         <section style={{ padding: '20px 20px 8px' }}>
-          <TrySampleLink onPick={() => onNavigate('extracting')} />
+          <TrySampleLink onPick={() => { onSwapEvidence('sample'); onNavigate('extracting'); }} />
         </section>
       </div>
 
