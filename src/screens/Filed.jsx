@@ -84,15 +84,62 @@ function CaseHeader({ caseId = 'RV-00214', vendor = 'Amazon', timeNatural = 'jus
   );
 }
 
-function LadderStep({ state, timestamp, label, detail, isFirst, isLast, isOpen, onToggle }) {
+function ConfirmButton({ label, sensitive, onClick }) {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      style={{
+        flex: 1, minHeight: 44, padding: '10px 14px',
+        borderRadius: 12, border: 'none', cursor: 'pointer',
+        fontFamily: 'inherit', fontSize: 13.5, fontWeight: 700,
+        letterSpacing: '-0.005em',
+        background: sensitive ? 'var(--gradient-hero)' : 'var(--accent-saffron)',
+        color: 'var(--on-accent)',
+        transform: pressed ? 'scale(0.98)' : 'scale(1)',
+        transition: 'transform 100ms ease-out',
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+function ReviewButton({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        minHeight: 44, padding: '10px 14px',
+        borderRadius: 12,
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+        cursor: 'pointer', fontFamily: 'inherit',
+        fontSize: 13.5, fontWeight: 600,
+        letterSpacing: '-0.005em',
+        color: 'var(--text-primary)',
+      }}
+    >
+      Review
+    </button>
+  );
+}
+
+function LadderStep({
+  state, timestamp, label, detail, isFirst, isLast, isOpen, onToggle,
+  awaitingConfirm, confirmLabel, sensitive, warning, onConfirm, onReview,
+}) {
   const isCompleted = state === 'completed';
-  const isNext = state === 'next';
+  const isActive = isCompleted || awaitingConfirm || state === 'next-auto';
 
   const nodeRing = isCompleted ? 'var(--accent-saffron)'
-                 : isNext      ? 'var(--accent-saffron)'
+                 : isActive    ? 'var(--accent-saffron)'
                                : 'var(--border-strong)';
   const nodeFill = isCompleted ? 'var(--accent-saffron)' : 'transparent';
-  const nodeBorderW = isNext ? 2.5 : isCompleted ? 0 : 1.5;
+  const nodeBorderW = isActive && !isCompleted ? 2.5 : isCompleted ? 0 : 1.5;
 
   const connectorBelowStyle = isCompleted
     ? { borderLeft: '2px solid var(--accent-saffron)' }
@@ -112,7 +159,7 @@ function LadderStep({ state, timestamp, label, detail, isFirst, isLast, isOpen, 
         {!isFirst && (
           <div style={{
             position: 'absolute', top: 0, bottom: 'calc(100% - 8px)',
-            ...(isCompleted || isNext
+            ...(isCompleted || isActive
               ? { borderLeft: '2px solid var(--accent-saffron)' }
               : { borderLeft: '2px dashed var(--border-strong)' }),
             width: 0,
@@ -127,7 +174,7 @@ function LadderStep({ state, timestamp, label, detail, isFirst, isLast, isOpen, 
           boxSizing: 'border-box',
           marginTop: isFirst ? 0 : 8,
           display: 'grid', placeItems: 'center',
-          boxShadow: isNext ? '0 0 0 4px var(--accent-saffron-soft)' : 'none',
+          boxShadow: awaitingConfirm ? '0 0 0 4px var(--accent-saffron-soft)' : 'none',
           transition: 'box-shadow 200ms ease',
         }}>
           {isCompleted && (
@@ -144,52 +191,63 @@ function LadderStep({ state, timestamp, label, detail, isFirst, isLast, isOpen, 
         )}
       </div>
 
-      <button
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        style={{
-          textAlign: 'left',
-          background: 'transparent', border: 'none', cursor: 'pointer',
-          padding: '0 0 18px',
-          fontFamily: 'inherit',
-          color: 'var(--text-primary)',
-          minHeight: 44,
-        }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: 10.5, fontWeight: 700,
-          letterSpacing: '0.12em', textTransform: 'uppercase',
-          color: isCompleted ? 'var(--accent-saffron)'
-               : isNext      ? 'var(--accent-saffron)'
-                             : 'var(--text-tertiary)',
-        }}>
-          {timestamp}
-          {isNext && (
-            <span style={{
-              padding: '1px 6px', borderRadius: 999,
-              background: 'var(--accent-saffron-soft)',
-              border: '1px solid var(--accent-saffron-border)',
-              fontSize: 9, letterSpacing: '0.1em',
-            }}>NEXT</span>
-          )}
-          <span style={{ flex: 1 }} />
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-               stroke="var(--text-tertiary)" strokeWidth="2.4"
-               strokeLinecap="round" strokeLinejoin="round"
-               style={{
-                 transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                 transition: 'transform 200ms cubic-bezier(0.22,1,0.36,1)',
-               }}>
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </div>
+      <div style={{ padding: '0 0 18px' }}>
+        <button
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          style={{
+            width: '100%',
+            textAlign: 'left',
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            padding: 0,
+            fontFamily: 'inherit',
+            color: 'var(--text-primary)',
+            minHeight: 44,
+          }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            fontSize: 10.5, fontWeight: 700,
+            letterSpacing: '0.12em', textTransform: 'uppercase',
+            color: isCompleted ? 'var(--accent-saffron)'
+                 : isActive    ? 'var(--accent-saffron)'
+                               : 'var(--text-tertiary)',
+          }}>
+            {timestamp}
+            {awaitingConfirm && (
+              <span style={{
+                padding: '1px 6px', borderRadius: 999,
+                background: 'var(--accent-saffron-soft)',
+                border: '1px solid var(--accent-saffron-border)',
+                fontSize: 9, letterSpacing: '0.1em',
+              }}>YOUR TURN</span>
+            )}
+            {state === 'next-auto' && (
+              <span style={{
+                padding: '1px 6px', borderRadius: 999,
+                background: 'var(--accent-saffron-soft)',
+                border: '1px solid var(--accent-saffron-border)',
+                fontSize: 9, letterSpacing: '0.1em',
+              }}>NEXT</span>
+            )}
+            <span style={{ flex: 1 }} />
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="var(--text-tertiary)" strokeWidth="2.4"
+                 strokeLinecap="round" strokeLinejoin="round"
+                 style={{
+                   transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                   transition: 'transform 200ms cubic-bezier(0.22,1,0.36,1)',
+                 }}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
 
-        <div style={{
-          marginTop: 4,
-          fontSize: 14.5, lineHeight: 1.35, fontWeight: 600,
-          letterSpacing: '-0.015em',
-          color: isCompleted || isNext ? 'var(--text-primary)' : 'var(--text-secondary)',
-        }}>{label}</div>
+          <div style={{
+            marginTop: 4,
+            fontSize: 14.5, lineHeight: 1.35, fontWeight: 600,
+            letterSpacing: '-0.015em',
+            color: isCompleted || isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+          }}>{label}</div>
+        </button>
 
         {isOpen && (
           <div style={{
@@ -203,7 +261,22 @@ function LadderStep({ state, timestamp, label, detail, isFirst, isLast, isOpen, 
             letterSpacing: '-0.005em',
           }}>{detail}</div>
         )}
-      </button>
+
+        {awaitingConfirm && (
+          <div style={{ marginTop: 12 }}>
+            {sensitive && warning && (
+              <p style={{
+                margin: '0 0 10px', fontSize: 12, lineHeight: 1.5,
+                color: 'var(--accent-saffron)', fontWeight: 600,
+              }}>⚠ {warning}</p>
+            )}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <ReviewButton onClick={onReview} />
+              <ConfirmButton label={confirmLabel} sensitive={sensitive} onClick={onConfirm} />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -218,7 +291,50 @@ function SectionLabel({ children }) {
   );
 }
 
-function SaffronCallout() {
+function AutoPilotToggle({ on, onChange }) {
+  return (
+    <button
+      onClick={() => onChange(!on)}
+      aria-pressed={on}
+      style={{
+        width: '100%', marginTop: 12,
+        padding: '10px 12px',
+        background: 'var(--bg-primary)',
+        border: '1px solid var(--accent-saffron-border)',
+        borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit',
+        display: 'flex', alignItems: 'center', gap: 10,
+        textAlign: 'left',
+      }}
+    >
+      <span style={{ flex: 1, minWidth: 0 }}>
+        <span style={{
+          display: 'block', fontSize: 12.5, fontWeight: 700,
+          letterSpacing: '-0.005em', color: 'var(--text-primary)',
+        }}>Auto-pilot</span>
+        <span style={{
+          display: 'block', marginTop: 1, fontSize: 11, lineHeight: 1.4,
+          color: 'var(--text-tertiary)',
+        }}>Escalate on schedule without asking each time</span>
+      </span>
+      <span aria-hidden style={{
+        flexShrink: 0, width: 38, height: 22, borderRadius: 999,
+        background: on ? 'var(--accent-saffron)' : 'var(--border-strong)',
+        position: 'relative',
+        transition: 'background 160ms ease',
+      }}>
+        <span style={{
+          position: 'absolute', top: 2,
+          left: on ? 18 : 2,
+          width: 18, height: 18, borderRadius: '50%',
+          background: 'var(--on-accent)',
+          transition: 'left 160ms cubic-bezier(0.22,1,0.36,1)',
+        }} />
+      </span>
+    </button>
+  );
+}
+
+function SaffronCallout({ autoPilot, onToggleAutoPilot }) {
   return (
     <div style={{
       position: 'relative',
@@ -245,13 +361,19 @@ function SaffronCallout() {
         fontSize: 15.5, fontWeight: 700,
         letterSpacing: '-0.015em', lineHeight: 1.25,
         color: 'var(--text-primary)',
-      }}>You do nothing.</div>
+      }}>{autoPilot ? "You do nothing." : "Your call, every step."}</div>
       <div style={{
         marginTop: 4,
         fontSize: 13, lineHeight: 1.5,
         letterSpacing: '-0.005em',
         color: 'var(--text-secondary)',
-      }}>We watch for replies and fire the next step the moment it's due.</div>
+      }}>
+        {autoPilot
+          ? "We watch for replies and fire the next step the moment it's due."
+          : "We'll tell you when the next move is ready. Nothing goes out — especially not a public post — until you confirm it."}
+      </div>
+
+      <AutoPilotToggle on={autoPilot} onChange={onToggleAutoPilot} />
     </div>
   );
 }
@@ -331,26 +453,93 @@ function SecondaryLink({ onClick }) {
   );
 }
 
-const STEPS = [
-  { state: 'completed', timestamp: 'Today, 2:14 PM',    label: 'Complaint filed via Amazon support',
-    detail: 'Submitted through Amazon\'s support flow with photos, A-to-Z Guarantee citation, and your replacement/refund ask. Amazon has 24h to respond.' },
-  { state: 'next',      timestamp: 'Tomorrow, 2:14 PM', label: 'Auto-escalate to Amazon Grievance Officer',
-    detail: 'If no resolution, we escalate to Amazon India\'s registered Grievance Officer with the full case file and a 7-day response window.' },
-  { state: 'pending',   timestamp: 'May 30',            label: 'Email Amazon India CEO office + tag @AmazonHelp publicly',
-    detail: 'Direct email to Amazon India\'s leadership inbox paired with a public @AmazonHelp post — private + public pressure in one move.' },
-  { state: 'pending',   timestamp: 'June 2',            label: 'File at National Consumer Helpline (NCH) via INGRAM portal',
-    detail: 'Formal INGRAM complaint under Consumer Protection Act, 2019 §47 (defective goods) — timestamped and cross-referenced to the prior steps.' },
-  { state: 'pending',   timestamp: 'June 7',            label: 'Draft e-Daakhil consumer court filing under CPA 2019 §47',
-    detail: 'Commission-level filing prepared for one-tap submission — admissible evidence and the full prior-step audit trail attached.' },
+// The initial filing is what got the user to this screen — it's already
+// "completed" by definition (they tapped File/Post/Call/Submit in YourMove).
+// Everything after it used to auto-fire on a schedule; now each rung
+// requires an explicit confirm unless auto-pilot is on (see AutoPilotToggle).
+const FILED_STEP = {
+  timestamp: 'Today, 2:14 PM',
+  label: 'Complaint filed via Amazon support',
+  detail: "Submitted through Amazon's support flow with photos, A-to-Z Guarantee citation, and your replacement/refund ask. Amazon has 24h to respond.",
+};
+
+const ESCALATION_STEPS = [
+  {
+    id: 'grievance',
+    label: 'Escalate to Amazon Grievance Officer',
+    detail: "If no resolution, we escalate to Amazon India's registered Grievance Officer with the full case file and a 7-day response window.",
+    confirmLabel: 'Confirm escalation',
+    autoTimestamp: 'Tomorrow, 2:14 PM',
+  },
+  {
+    id: 'public',
+    label: 'Email Amazon India CEO office + tag @AmazonHelp publicly',
+    detail: "Direct email to Amazon India's leadership inbox paired with a public @AmazonHelp post — private + public pressure in one move.",
+    confirmLabel: 'Yes, post publicly',
+    sensitive: true,
+    warning: "This posts publicly and can't be undone.",
+    autoTimestamp: 'May 30',
+  },
+  {
+    id: 'nch',
+    label: 'File at National Consumer Helpline (NCH) via INGRAM portal',
+    detail: 'Formal INGRAM complaint under Consumer Protection Act, 2019 §47 (defective goods) — timestamped and cross-referenced to the prior steps.',
+    confirmLabel: 'Confirm filing',
+    autoTimestamp: 'June 2',
+  },
+  {
+    id: 'edaakhil',
+    label: 'Draft e-Daakhil consumer court filing under CPA 2019 §47',
+    detail: 'Commission-level filing prepared for one-tap submission — admissible evidence and the full prior-step audit trail attached.',
+    confirmLabel: 'Confirm filing',
+    autoTimestamp: 'June 7',
+  },
 ];
+
+function buildRows({ confirmedCount, autoPilot }) {
+  const rows = [{ ...FILED_STEP, state: 'completed', key: 'filed' }];
+  ESCALATION_STEPS.forEach((step, i) => {
+    if (i < confirmedCount) {
+      rows.push({ ...step, key: step.id, state: 'completed', timestamp: 'Just now' });
+    } else if (i === confirmedCount) {
+      rows.push({
+        ...step,
+        key: step.id,
+        state: autoPilot ? 'next-auto' : 'awaiting-confirm',
+        awaitingConfirm: !autoPilot,
+        timestamp: autoPilot ? step.autoTimestamp : 'Awaiting your go-ahead',
+      });
+    } else {
+      rows.push({ ...step, key: step.id, state: 'locked', timestamp: 'Unlocks after the step above' });
+    }
+  });
+  return rows;
+}
+
+const DEFAULT_ESCALATION = { confirmedCount: 0, autoPilot: false };
 
 export default function FiledScreen({
   mode = 'light',
   caseId = 'RV-00214',
   vendor = 'Amazon',
   onNavigate = () => {},
+  onStartNew = () => {},
+  escalationState = DEFAULT_ESCALATION,
+  onEscalationChange = () => {},
 }) {
   const [openIdx, setOpenIdx] = useState(null);
+  const { confirmedCount, autoPilot } = escalationState;
+  const rows = buildRows({ confirmedCount, autoPilot });
+
+  const handleConfirmStep = () => {
+    onEscalationChange({
+      confirmedCount: Math.min(confirmedCount + 1, ESCALATION_STEPS.length),
+      autoPilot,
+    });
+  };
+  const handleToggleAutoPilot = (next) => {
+    onEscalationChange({ confirmedCount, autoPilot: next });
+  };
 
   return (
     <div
@@ -379,29 +568,35 @@ export default function FiledScreen({
           <SectionLabel>The escalation ladder</SectionLabel>
 
           <div style={{ marginTop: 18 }}>
-            {STEPS.map((step, i) => (
+            {rows.map((row, i) => (
               <LadderStep
-                key={i}
-                state={step.state}
-                timestamp={step.timestamp}
-                label={step.label}
-                detail={step.detail}
+                key={row.key}
+                state={row.state}
+                timestamp={row.timestamp}
+                label={row.label}
+                detail={row.detail}
                 isFirst={i === 0}
-                isLast={i === STEPS.length - 1}
+                isLast={i === rows.length - 1}
                 isOpen={openIdx === i}
                 onToggle={() => setOpenIdx((cur) => cur === i ? null : i)}
+                awaitingConfirm={row.awaitingConfirm}
+                confirmLabel={row.confirmLabel}
+                sensitive={row.sensitive}
+                warning={row.warning}
+                onConfirm={handleConfirmStep}
+                onReview={() => setOpenIdx(i)}
               />
             ))}
           </div>
         </section>
 
         <section style={{ padding: '4px 20px 0' }}>
-          <SaffronCallout />
+          <SaffronCallout autoPilot={autoPilot} onToggleAutoPilot={handleToggleAutoPilot} />
         </section>
 
         <section style={{ padding: '24px 20px 0' }}>
           <PrimaryCTA onClick={() => onNavigate('dashboard')} />
-          <SecondaryLink onClick={() => onNavigate('capture')} />
+          <SecondaryLink onClick={onStartNew} />
         </section>
       </div>
 
