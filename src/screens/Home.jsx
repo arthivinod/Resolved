@@ -253,6 +253,7 @@ export default function HomeScreen({
   mode = 'light',
   onToggleMode = () => {},
   onNavigate = () => {},
+  onStartNew = () => {},
 }) {
   const [loading, setLoading] = useState(true);
   const [pull, setPull] = useState(0);
@@ -337,7 +338,7 @@ export default function HomeScreen({
             zIndex: 2,
           }}
         >
-          <GradientButton onClick={() => onNavigate('capture')} icon="plus">
+          <GradientButton onClick={onStartNew} icon="plus">
             New complaint
           </GradientButton>
         </section>
