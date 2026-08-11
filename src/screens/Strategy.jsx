@@ -3,7 +3,7 @@
 // Ported from design-exports/Hackathon/strategy-screen.jsx.
 // ─────────────────────────────────────────────────────────────────
 
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import StepIndicator from '../components/StepIndicator.jsx';
 import BottomNav from '../components/BottomNav.jsx';
 
@@ -117,8 +117,17 @@ function StrategyRow({ label, value, aiValue, why, alternatives, isOpen, onToggl
   const [pressed, setPressed] = useState(false);
   return (
     <div>
-      <button
+      {/* A <div role="button">, not a <button> — the "edited" pill below is a
+          real <button> (it needs its own click target to revert), and a
+          button can't contain another button without breaking HTML nesting
+          rules (React warns on this in the console). */}
+      <div
+        role="button"
+        tabIndex={0}
         onClick={onToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); }
+        }}
         onMouseDown={() => setPressed(true)}
         onMouseUp={() => setPressed(false)}
         onMouseLeave={() => setPressed(false)}
@@ -171,7 +180,7 @@ function StrategyRow({ label, value, aiValue, why, alternatives, isOpen, onToggl
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </span>
-      </button>
+      </div>
 
       {isOpen && (
         <div style={{ padding: '0 16px 16px' }}>
@@ -421,11 +430,20 @@ export default function StrategyScreen({
   mode = 'light',
   vendor = 'Amazon',
   onNavigate = () => {},
+  strategyValues,
+  onStrategyChange = () => {},
 }) {
-  const [values, setValues] = useState(() =>
-    Object.fromEntries(ROWS.map((r) => [r.id, r.aiValue]))
+  const [values, setValues] = useState(
+    () => strategyValues || Object.fromEntries(ROWS.map((r) => [r.id, r.aiValue]))
   );
   const [openId, setOpenId] = useState(null);
+
+  // Report the current picks upward so App can persist them — refreshing
+  // mid-strategy shouldn't discard a tone/legal-hook/demand override.
+  useEffect(() => {
+    onStrategyChange(values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
 
   const canReset = ROWS.some((r) => values[r.id] !== r.aiValue);
   const handleReset = () => {
