@@ -416,12 +416,106 @@ function RewordSheet({ open, onPick, onCancel }) {
   );
 }
 
+function ShareSheet({ open, letter, onCancel }) {
+  if (!open) return null;
+  const subject = encodeURIComponent('My complaint letter');
+  const body = encodeURIComponent(letter);
+  const mailtoHref = `mailto:?subject=${subject}&body=${body}`;
+  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(letter)}`;
+  const optionStyle = {
+    padding: '14px 14px', minHeight: 56,
+    background: 'var(--bg-surface)',
+    border: '1px solid var(--border)',
+    borderRadius: 14, cursor: 'pointer', fontFamily: 'inherit',
+    textAlign: 'left', color: 'var(--text-primary)',
+    display: 'flex', alignItems: 'center', gap: 12,
+    textDecoration: 'none',
+  };
+  return (
+    <>
+      <div onClick={onCancel} style={{
+        position: 'absolute', inset: 0, zIndex: 40,
+        background: 'rgba(0, 0, 0, 0.45)',
+      }} />
+      <div style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 41,
+        background: 'var(--bg-elevated)',
+        borderTopLeftRadius: 24, borderTopRightRadius: 24,
+        padding: '12px 16px 28px',
+        boxShadow: '0 -12px 40px rgba(0, 0, 0, 0.30)',
+        animation: 'sheetUp 240ms cubic-bezier(0.22,1,0.36,1) both',
+      }}>
+        <div style={{
+          width: 36, height: 4, borderRadius: 999,
+          background: 'var(--border-strong)',
+          margin: '0 auto 14px',
+        }} />
+        <div style={{
+          fontSize: 16, fontWeight: 700,
+          letterSpacing: '-0.02em', color: 'var(--text-primary)',
+          marginBottom: 4,
+        }}>Send it yourself</div>
+        <div style={{
+          fontSize: 12, color: 'var(--text-secondary)',
+          marginBottom: 14, lineHeight: 1.5,
+        }}>Opens with the letter already filled in.</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <a href={mailtoHref} onClick={onCancel} style={optionStyle}>
+            <span style={{
+              width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+              background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+              color: 'var(--text-secondary)', display: 'grid', placeItems: 'center',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><polyline points="3 7 12 13 21 7" /></svg>
+            </span>
+            <span style={{ fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.01em' }}>Email it</span>
+          </a>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" onClick={onCancel} style={optionStyle}>
+            <span style={{
+              width: 32, height: 32, borderRadius: 10, flexShrink: 0,
+              background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+              color: 'var(--text-secondary)', display: 'grid', placeItems: 'center',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7" /><polyline points="3 4 3 10 9 10" /></svg>
+            </span>
+            <span style={{ fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.01em' }}>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function LetterFormat({ letter, edited, rendered, streaming, onSkip, onApplyVariant, onApplyEdit, onRestore, onSubmit }) {
   const [editOpen, setEditOpen] = useState(false);
   const [rewordOpen, setRewordOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [copyState, setCopyState] = useState('idle'); // idle | copied | failed
 
   const handleSaveEdit = (next) => { onApplyEdit(next); setEditOpen(false); };
   const handleReword = (opt) => { onApplyVariant(REWORDED_LETTERS[opt.id] || letter); setRewordOpen(false); };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(letter);
+      setCopyState('copied');
+    } catch {
+      setCopyState('failed');
+    }
+    setTimeout(() => setCopyState('idle'), 1800);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'My complaint letter', text: letter });
+        return;
+      } catch {
+        // user cancelled the native share sheet, or it's unsupported here — fall back
+      }
+    }
+    setShareOpen(true);
+  };
 
   return (
     <>
@@ -430,6 +524,21 @@ function LetterFormat({ letter, edited, rendered, streaming, onSkip, onApplyVari
       </section>
 
       <section style={{ padding: '16px 20px 0' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <SecondaryAction
+            onClick={handleCopy}
+            icon={(<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>)}
+            label={copyState === 'copied' ? 'Copied!' : copyState === 'failed' ? "Couldn't copy" : 'Copy'}
+          />
+          <SecondaryAction
+            onClick={handleShare}
+            icon={(<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.6" y1="10.5" x2="15.4" y2="6.5" /><line x1="8.6" y1="13.5" x2="15.4" y2="17.5" /></svg>)}
+            label="Share"
+          />
+        </div>
+      </section>
+
+      <section style={{ padding: '10px 20px 0' }}>
         <div style={{ display: 'flex', gap: 10 }}>
           <SecondaryAction
             onClick={() => setEditOpen(true)}
@@ -467,6 +576,7 @@ function LetterFormat({ letter, edited, rendered, streaming, onSkip, onApplyVari
 
       <EditSheet open={editOpen} value={letter} onSave={handleSaveEdit} onCancel={() => setEditOpen(false)} />
       <RewordSheet open={rewordOpen} onPick={handleReword} onCancel={() => setRewordOpen(false)} />
+      <ShareSheet open={shareOpen} letter={letter} onCancel={() => setShareOpen(false)} />
     </>
   );
 }
@@ -869,13 +979,25 @@ function ActiveHeading({ active }) {
 
 const FORMATS = ['letter', 'tweet', 'call', 'filing'];
 
-export default function YourMoveScreen({ mode = 'light', onNavigate = () => {} }) {
-  const [activeFormat, setActiveFormat] = useState('letter');
-  const [letter, setLetter] = useState(LETTER_DEFAULT);
-  const [edited, setEdited] = useState(false);
+export default function YourMoveScreen({
+  mode = 'light',
+  onNavigate = () => {},
+  letterState,
+  onLetterChange = () => {},
+}) {
+  const [activeFormat, setActiveFormat] = useState(letterState?.activeFormat || 'letter');
+  const [letter, setLetter] = useState(letterState?.text || LETTER_DEFAULT);
+  const [edited, setEdited] = useState(letterState?.edited || false);
   const [streamKey, setStreamKey] = useState(0);
 
   const { rendered, done, skip } = useTypewriter(letter, { replayKey: streamKey });
+
+  // Report the draft upward so App can persist it — refreshing mid-edit
+  // shouldn't lose a rewritten or reworded letter.
+  useEffect(() => {
+    onLetterChange({ text: letter, edited, activeFormat });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [letter, edited, activeFormat]);
 
   const handleApplyVariant = (text) => {
     setLetter(text); setEdited(true); setStreamKey((k) => k + 1);
