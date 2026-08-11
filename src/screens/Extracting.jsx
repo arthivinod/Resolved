@@ -1,7 +1,14 @@
 // ─────────────────────────────────────────────────────────────────
-// Extracting — Screen 3. Two phases: loading (orb) → done (State A
-// hero with extracted fields). States B/C exist in the canonical
-// export but aren't wired in the demo flow.
+// Extracting — Screen 3. Loading (orb) → one of two outcomes:
+//   - facts card (State A/B unified — some fields may be pre-filled,
+//     some may need the user to fill them in before continuing)
+//   - could-not-read (State C — offers "try another file" or
+//     "add details manually", which routes into the same facts card
+//     fully blank).
+// Which outcome shows is decided by App based on which Capture input
+// was picked (see outcomeForEvidence in App.jsx) — there's no live
+// vision model wired up, so this keeps the failure/partial paths
+// honestly demoable instead of faking real detection.
 // Ported from design-exports/Hackathon/extracting-screen.jsx.
 // ─────────────────────────────────────────────────────────────────
 
@@ -106,26 +113,27 @@ function LoadingPhase({ onCancel }) {
   );
 }
 
-function CompletionHeader() {
+function CompletionHeader({ heading = "Here's what I see.", demeanor = 'celebrate' }) {
   return (
     <div style={{
       padding: '8px 20px 0',
       display: 'flex', alignItems: 'flex-start', gap: 14,
     }}>
-      <Orb size={56} demeanor="celebrate" />
+      <Orb size={56} demeanor={demeanor} />
       <div style={{ flex: 1, minWidth: 0, paddingTop: 4 }}>
         <h1 style={{
           margin: 0,
           fontSize: 24, lineHeight: 1.2, fontWeight: 700,
           letterSpacing: '-0.03em',
           color: 'var(--text-primary)',
-        }}>Here's what I see.</h1>
+        }}>{heading}</h1>
       </div>
     </div>
   );
 }
 
 function ExtractedField({ label, value, confident = true, revealed = true, onEdit = () => {} }) {
+  const missing = !value;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   const inputRef = useRef(null);
@@ -183,18 +191,29 @@ function ExtractedField({ label, value, confident = true, revealed = true, onEdi
       ) : (
         <span style={{
           flex: 1, minWidth: 0,
-          fontSize: 14, fontWeight: 600,
+          fontSize: 14, fontWeight: missing ? 500 : 600,
+          fontStyle: missing ? 'italic' : 'normal',
           letterSpacing: '-0.005em',
-          color: 'var(--text-primary)',
+          color: missing ? 'var(--text-tertiary)' : 'var(--text-primary)',
           textDecoration: !confident ? 'underline dotted' : 'none',
           textDecorationColor: 'var(--text-tertiary)',
           textUnderlineOffset: 3,
           whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-        }}>{value}</span>
+        }}>{missing ? 'Tap to add' : value}</span>
       )}
 
       <span style={{ flexShrink: 0, width: 20, height: 20, display: 'grid', placeItems: 'center' }}>
-        {confident ? (
+        {missing ? (
+          <span style={{
+            width: 18, height: 18, borderRadius: '50%',
+            background: 'var(--bg-elevated)',
+            border: '1.5px dashed var(--border-strong)',
+            color: 'var(--text-tertiary)',
+            fontSize: 12, fontWeight: 700,
+            display: 'grid', placeItems: 'center',
+            lineHeight: 1,
+          }}>+</span>
+        ) : confident ? (
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                stroke="var(--accent-saffron)" strokeWidth="2.6"
                strokeLinecap="round" strokeLinejoin="round">
@@ -322,15 +341,6 @@ function CompletionTagline({ children, revealed = true }) {
   );
 }
 
-const FIELDS_A = [
-  { label: 'Vendor',    value: '📦 Amazon',                                  confident: true  },
-  { label: 'Order ID',  value: '#408-3927461-5824103',                       confident: true  },
-  { label: 'Amount',    value: '₹7,499',                                     confident: true  },
-  { label: 'Issue',     value: 'Charger stopped working — within warranty',  confident: true  },
-  { label: 'Severity',  value: 'High',                                       confident: false },
-  { label: 'Delivered', value: 'March 12, 2026 (76 days ago)',               confident: true  },
-];
-
 function useStaggerReveal(total, { firstDelay = 200, step = 150, deps = [] } = {}) {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -345,8 +355,29 @@ function useStaggerReveal(total, { firstDelay = 200, step = 150, deps = [] } = {
   return count;
 }
 
-function StateA({ onSubmit }) {
-  const fields = FIELDS_A;
+function HelperTip({ children, revealed = true }) {
+  return (
+    <p style={{
+      margin: 0, textAlign: 'center',
+      fontSize: 12, lineHeight: 1.5,
+      letterSpacing: '-0.005em',
+      color: 'var(--text-tertiary)',
+      opacity: revealed ? 1 : 0,
+      transform: revealed ? 'translateY(0)' : 'translateY(6px)',
+      transition: 'opacity 320ms cubic-bezier(0.22,1,0.36,1), transform 320ms cubic-bezier(0.22,1,0.36,1)',
+    }}>{children}</p>
+  );
+}
+
+// Fields with an empty value need the user's input before the strategy step
+// can use them — a wrong or missing fact flowing into a law-cited letter is
+// a real trust problem, not just an incomplete demo. Handles both the
+// all-filled case (identical to the old State A) and the some-missing case
+// (State B) with one code path instead of two near-duplicate components.
+function StateA({ facts, onEditFact, onSubmit }) {
+  const fields = facts;
+  const missingCount = fields.filter((f) => !f.value).length;
+  const allFilled = missingCount === 0;
   const TOTAL = fields.length + 3;
   const count = useStaggerReveal(TOTAL, { firstDelay: 200, step: 150, deps: [] });
   return (
@@ -359,19 +390,26 @@ function StateA({ onSubmit }) {
         >
           {fields.map((f, i) => (
             <ExtractedField
-              key={f.label}
+              key={f.id}
               label={f.label}
               value={f.value}
               confident={f.confident}
               revealed={count >= i + 1}
+              onEdit={(v) => onEditFact(f.id, v)}
             />
           ))}
         </LedgerCard>
       </section>
       <section style={{ padding: '20px 20px 0' }}>
-        <CompletionTagline revealed={count >= fields.length + 2}>
-          Six details, ready to file.
-        </CompletionTagline>
+        {allFilled ? (
+          <CompletionTagline revealed={count >= fields.length + 2}>
+            Six details, ready to file.
+          </CompletionTagline>
+        ) : (
+          <HelperTip revealed={count >= fields.length + 2}>
+            💡 A bill or receipt works better than a photo of the item itself — fill in what's missing above.
+          </HelperTip>
+        )}
       </section>
       <section style={{
         padding: '16px 20px 0',
@@ -379,14 +417,99 @@ function StateA({ onSubmit }) {
         transform: count >= TOTAL ? 'translateY(0)' : 'translateY(6px)',
         transition: 'opacity 320ms cubic-bezier(0.22,1,0.36,1), transform 320ms cubic-bezier(0.22,1,0.36,1)',
       }}>
-        <PrimaryCTA label="Pick the play" onClick={onSubmit} />
+        <PrimaryCTA
+          label={allFilled ? 'Pick the play' : 'Add details to continue'}
+          onClick={onSubmit}
+          disabled={!allFilled}
+        />
       </section>
     </>
   );
 }
 
-export default function ExtractingScreen({ mode = 'light', onNavigate = () => {} }) {
+function StateFailed({ onRetry, onManual }) {
+  return (
+    <>
+      <CompletionHeader heading="Hmm, that didn't come through clearly." demeanor="neutral" />
+
+      <section style={{ padding: '20px 20px 0' }}>
+        <div style={{
+          padding: 14, borderRadius: 14,
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border)',
+          display: 'flex', alignItems: 'center', gap: 12,
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 10, flexShrink: 0,
+            background: 'var(--bg-elevated)',
+            border: '1px solid var(--border)',
+            display: 'grid', placeItems: 'center',
+            color: 'var(--text-tertiary)',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="1.6"
+                 strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="m3 16 5-5 4 4 4-4 5 5" />
+            </svg>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontSize: 13, fontWeight: 600,
+              color: 'var(--text-primary)',
+              letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>pasted-image.png</div>
+            <div style={{
+              fontSize: 11.5, color: 'var(--text-tertiary)', marginTop: 2,
+            }}>Too blurry or low-resolution to read</div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '16px 20px 0' }}>
+        <p style={{
+          margin: 0, fontSize: 13, lineHeight: 1.55,
+          color: 'var(--text-secondary)',
+        }}>
+          We couldn't read this clearly enough to pull out the details. Try a sharper photo or a
+          screenshot with the text in focus — or skip straight to typing in what happened.
+        </p>
+      </section>
+
+      <section style={{
+        padding: '20px 20px 0',
+        display: 'flex', flexDirection: 'column', gap: 10,
+      }}>
+        <PrimaryCTA label="Try another file" onClick={onRetry} />
+        <button
+          onClick={onManual}
+          style={{
+            height: 48, width: '100%',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 999, cursor: 'pointer', fontFamily: 'inherit',
+            fontSize: 14.5, fontWeight: 700, letterSpacing: '-0.01em',
+            color: 'var(--text-primary)',
+          }}
+        >
+          Add details manually
+        </button>
+      </section>
+    </>
+  );
+}
+
+export default function ExtractingScreen({
+  mode = 'light',
+  onNavigate = () => {},
+  facts,
+  onEditFact = () => {},
+  extractionOutcome = 'success',
+  onGoManual = () => {},
+}) {
   const [phase, setPhase] = useState('loading');
+  const failed = extractionOutcome === 'failed';
 
   useEffect(() => {
     setPhase('loading');
@@ -420,14 +543,19 @@ export default function ExtractingScreen({ mode = 'light', onNavigate = () => {}
 
         <section style={{ padding: '8px 20px 0' }}>
           <StepIndicator>
-            Step 2 of 4 · {phase === 'loading' ? 'Extracting' : 'Extracted'}
+            Step 2 of 4 · {phase === 'loading' ? 'Extracting' : failed ? "Couldn't read it" : 'Extracted'}
           </StepIndicator>
         </section>
 
         {phase === 'loading' ? (
           <LoadingPhase onCancel={() => onNavigate('capture')} />
+        ) : failed ? (
+          <StateFailed
+            onRetry={() => onNavigate('capture')}
+            onManual={onGoManual}
+          />
         ) : (
-          <StateA onSubmit={() => onNavigate('strategy')} />
+          <StateA facts={facts} onEditFact={onEditFact} onSubmit={() => onNavigate('strategy')} />
         )}
       </div>
 
