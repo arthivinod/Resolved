@@ -4,10 +4,10 @@
 
 Resolved helps people in India get a washing machine, AC, fridge or TV repaired through the brand's own service network, without hunting for the right number or explaining the model three times. You pick the brand, the model and what's wrong. Resolved hands you a complete request (model, serial, invoice date, warranty status, what you've already tried) and routes it to the right channel. If the brand goes quiet, it walks you up the escalation ladder, one approved step at a time.
 
-This repo holds two versions of the idea. v1 was a complaint-fighting agent, built as a React app. v2 is where the product is going: a PRD, plus a clickable web prototype in [`prototype/`](prototype/).
+This repo holds two versions of the idea. v1 was a complaint-fighting agent, built as a React app. v2 is where the product is going: a PRD, plus a clickable web prototype, [live here](https://arthivinod.github.io/Resolved/prototype/screens.html) (source in [`docs/prototype/`](docs/prototype/)).
 
 - **v2 PRD:** [Resolved v2 — PRD](https://claude.ai/artifact/6ijsxYyqwnihhsWxXCXHyj)
-- **v2 prototype:** 12 clickable screens covering two consumer journeys, case tracking, escalation and the brand console ([run it locally](#run-the-v2-prototype))
+- **v2 prototype:** [arthivinod.github.io/Resolved](https://arthivinod.github.io/Resolved/prototype/screens.html), 12 clickable screens covering two consumer journeys, case tracking, escalation and the brand console
 
 <p align="center">
   <img src="docs/screenshots/v2-index.png" width="24%" alt="Home: search a brand or snap the model sticker" />
@@ -83,7 +83,7 @@ React 18 + Vite, a hand-built light/dark design system on CSS custom properties,
 Plain HTML, nothing to install:
 
 ```bash
-python3 -m http.server 5180 --directory prototype
+python3 -m http.server 5180 --directory docs/prototype
 ```
 
 Open `http://localhost:5180/screens.html` for every screen by journey, or start at `http://localhost:5180/` and tap through.
