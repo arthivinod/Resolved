@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalate with your go-ahead · Resolved v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#C45F00;text-decoration:none}a:hover{color:#8A4300}
+</style>
+<style>
+body{margin:0;min-height:100vh;background:#E9E2D4;display:flex;flex-direction:column;align-items:center;padding:56px 0 32px;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+.proto-bar{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;font-size:12px;color:#3D3830;background:#FFFFFFCC;border:1px solid #D4C8AC;border-radius:999px;padding:6px 12px;z-index:10;white-space:nowrap}
+.proto-bar a{color:#C45F00;font-weight:600;text-decoration:none}
+.phone{border-radius:32px;overflow:hidden;box-shadow:0 1px 0 #D4C8AC,0 20px 50px rgba(26,22,18,.18)}
+@media (max-width:480px){body{padding:0;background:#FBF6EC}.phone{border-radius:0;box-shadow:none}.proto-bar{display:none}}
+html.shot body{padding:0;align-items:flex-start;background:#FBF6EC}
+html.shot .proto-bar{display:none}
+html.shot .phone{border-radius:0;box-shadow:none}
+</style>
+<script>if (location.search.includes('shot')) document.documentElement.classList.add('shot');</script>
+</head>
+<body>
+<div class="proto-bar">Resolved v2 · clickable prototype · <a href="screens.html">All screens</a></div>
+<div class="phone"><div style="width: 390px; height: 844px; box-sizing: border-box; background: #FBF6EC; color: #1A1612; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 16px 12px 4px">
+    <a href="cases.html" aria-label="Back to cases" style="width: 44px; height: 44px; display: grid; place-items: center; color: #1A1612">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </a>
+    <span style="font-size: 12px; font-weight: 600; color: #6A625A; padding-right: 8px">Case RV-0207 · Day 12</span>
+  </header>
+
+  <section style="padding: 0 20px; display: flex; flex-direction: column; gap: 6px">
+    <h1 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em">Voltas hasn't fixed your AC in 12 days</h1>
+    <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #6A625A">Two reminders, no technician. The next step is a letter to Voltas's grievance officer.</p>
+  </section>
+
+  <section style="padding: 14px 20px 0" aria-label="Escalation ladder">
+    <ol style="list-style: none; margin: 0; padding: 12px 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+      <li style="display: flex; justify-content: space-between"><span style="color: #6A625A">1. Request to Voltas service</span><span style="color: #1B5E20; font-weight: 600">Sent 21 Oct</span></li>
+      <li style="display: flex; justify-content: space-between"><span style="color: #6A625A">2. Two reminders</span><span style="color: #1B5E20; font-weight: 600">Sent</span></li>
+      <li style="display: flex; justify-content: space-between; padding: 8px 10px; margin: 0 -10px; border-radius: 10px; background: #FFF1E3"><span style="font-weight: 600">3. Grievance officer</span><span style="color: #C45F00; font-weight: 600">Needs your go-ahead</span></li>
+      <li style="display: flex; justify-content: space-between"><span style="color: #6A625A">4. National Consumer Helpline</span><span style="color: #6A625A">If no reply in 7 days</span></li>
+      <li style="display: flex; justify-content: space-between"><span style="color: #6A625A">5. Consumer commission</span><span style="color: #6A625A">Your call, later</span></li>
+    </ol>
+  </section>
+
+  <section style="padding: 12px 20px 0; flex: 1; min-height: 0; display: flex">
+    <div style="flex: 1; min-height: 0; border-radius: 16px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; overflow: hidden">
+      <div style="padding: 10px 16px; border-bottom: 1px solid #F1EADB; font-size: 12px; color: #6A625A"><strong style="color: #1A1612; font-weight: 600">To</strong> Voltas grievance officer (from their published contacts)</div>
+      <div style="flex: 1; min-height: 0; overflow: auto; padding: 12px 16px; font-size: 13px; line-height: 1.55; white-space: pre-line">Dear Grievance Officer,
+
+My Voltas split AC (1.5 ton, bought 4 Apr 2025, in warranty) stopped cooling on 20 Oct 2026. I raised a service request on 21 Oct (ticket attached) and sent reminders on 25 Oct and 29 Oct. No technician has visited.
+
+Please arrange a repair within 7 days and confirm by reply. Invoice, ticket and earlier emails are attached.
+
+Regards,
+Meera</div>
+    </div>
+  </section>
+
+  <section style="padding: 12px 20px 20px; display: flex; flex-direction: column; gap: 8px">
+    <div id="ask" style="display: flex; flex-direction: column; gap: 8px">
+      <button id="approve" style="min-height: 52px; border-radius: 14px; border: none; background: #C45F00; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Yes, open it in my email</button>
+      <a href="cases.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D4C8AC; color: #1A1612; font-size: 14px; font-weight: 600">Wait 3 more days</a>
+    </div>
+    <div id="done" hidden style="flex-direction: column; gap: 8px">
+      <div role="status" style="display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 14px; background: #E8F3E9; color: #1B5E20">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span style="font-size: 13px; font-weight: 600">Logged. We'll remind you on 10 Nov if there's no reply.</span>
+      </div>
+      <a href="cases.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D4C8AC; color: #1A1612; font-size: 14px; font-weight: 600">Back to cases</a>
+    </div>
+    <p style="margin: 0; font-size: 11px; line-height: 1.4; color: #6A625A; text-align: center">Nothing goes out without your tap. Each step up the ladder asks again.</p>
+  </section>
+</div></div>
+<script>
+document.getElementById('approve').addEventListener('click', () => {
+  document.getElementById('ask').style.display = 'none';
+  const done = document.getElementById('done'); done.hidden = false; done.style.display = 'flex';
+});
+</script>
+</body>
+</html>

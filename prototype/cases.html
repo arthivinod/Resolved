@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your cases · Resolved v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#C45F00;text-decoration:none}a:hover{color:#8A4300}
+</style>
+<style>
+body{margin:0;min-height:100vh;background:#E9E2D4;display:flex;flex-direction:column;align-items:center;padding:56px 0 32px;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+.proto-bar{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;font-size:12px;color:#3D3830;background:#FFFFFFCC;border:1px solid #D4C8AC;border-radius:999px;padding:6px 12px;z-index:10;white-space:nowrap}
+.proto-bar a{color:#C45F00;font-weight:600;text-decoration:none}
+.phone{border-radius:32px;overflow:hidden;box-shadow:0 1px 0 #D4C8AC,0 20px 50px rgba(26,22,18,.18)}
+@media (max-width:480px){body{padding:0;background:#FBF6EC}.phone{border-radius:0;box-shadow:none}.proto-bar{display:none}}
+html.shot body{padding:0;align-items:flex-start;background:#FBF6EC}
+html.shot .proto-bar{display:none}
+html.shot .phone{border-radius:0;box-shadow:none}
+</style>
+<script>if (location.search.includes('shot')) document.documentElement.classList.add('shot');</script>
+</head>
+<body>
+<div class="proto-bar">Resolved v2 · clickable prototype · <a href="screens.html">All screens</a></div>
+<div class="phone"><div style="width: 390px; height: 844px; box-sizing: border-box; background: #FBF6EC; color: #1A1612; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 8px">
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.03em">Your cases</h1>
+    <a href="index.html" aria-label="New case" style="width: 44px; height: 44px; border-radius: 999px; background: #C45F00; display: grid; place-items: center; color: #FFFFFF">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </a>
+  </header>
+
+  <section aria-label="Summary" style="padding: 8px 20px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+    <div style="padding: 12px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; gap: 2px">
+      <span style="font-size: 22px; font-weight: 700">2</span><span style="font-size: 11px; color: #6A625A">Open</span>
+    </div>
+    <div style="padding: 12px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; gap: 2px">
+      <span style="font-size: 22px; font-weight: 700; color: #1B5E20">3</span><span style="font-size: 11px; color: #6A625A">Fixed</span>
+    </div>
+    <div style="padding: 12px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; gap: 2px">
+      <span style="font-size: 22px; font-weight: 700">6 days</span><span style="font-size: 11px; color: #6A625A">Avg to fix</span>
+    </div>
+  </section>
+
+  <section style="padding: 14px 20px 0; display: flex; gap: 6px" aria-label="Filter">
+    <button aria-pressed="true" style="height: 36px; padding: 0 14px; border-radius: 999px; border: none; background: #1A1612; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 600">All</button>
+    <button aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #D4C8AC; background: #FFFFFF; color: #1A1612; font-family: inherit; font-size: 13px">Needs you · 1</button>
+    <button aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #D4C8AC; background: #FFFFFF; color: #1A1612; font-family: inherit; font-size: 13px">Fixed</button>
+  </section>
+
+  <section style="padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; overflow: auto">
+    <h2 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6A625A">Open</h2>
+    <a href="escalate.html" style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #B04A00; color: #1A1612">
+      <span style="display: flex; justify-content: space-between; align-items: center">
+        <span style="font-size: 15px; font-weight: 600">Voltas AC · not cooling</span>
+        <span style="font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #FDEBDD; color: #8A3A00">Day 12</span>
+      </span>
+      <span style="font-size: 13px; color: #3D3830">No visit after 2 reminders. Next step is ready for your go-ahead.</span>
+      <span style="font-size: 13px; font-weight: 600; color: #C45F00">Review next step →</span>
+    </a>
+    <a href="track.html" style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E8DFCB; color: #1A1612">
+      <span style="display: flex; justify-content: space-between; align-items: center">
+        <span style="font-size: 15px; font-weight: 600">LG washer · not draining</span>
+        <span style="font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: #EEF2FF; color: #2E5BFF">Day 3</span>
+      </span>
+      <span style="font-size: 13px; color: #3D3830">Technician visit booked for Thu, 6 Nov.</span>
+      <span style="height: 6px; border-radius: 999px; background: #F1EADB; overflow: hidden"><span style="display: block; width: 60%; height: 100%; background: #C45F00"></span></span>
+    </a>
+
+    <h2 style="margin: 8px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6A625A">Fixed</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DFCB">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Samsung fridge · not cooling</span><span style="font-size: 12px; color: #6A625A">Compressor relay replaced, under warranty</span></span>
+      <span style="font-size: 12px; font-weight: 600; color: #1B5E20">5 days</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DFCB">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Whirlpool washer · door locked</span><span style="font-size: 12px; color: #6A625A">Door latch replaced</span></span>
+      <span style="font-size: 12px; font-weight: 600; color: #1B5E20">4 days</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E8DFCB">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Godrej AC · leaking water</span><span style="font-size: 12px; color: #6A625A">Fixed after grievance officer step</span></span>
+      <span style="font-size: 12px; font-weight: 600; color: #1B5E20">9 days</span>
+    </div>
+  </section>
+
+  <nav aria-label="Main" style="display: flex; justify-content: space-around; border-top: 1px solid #E8DFCB; background: #FFFFFF; padding: 8px 0 20px">
+    <a href="index.html" style="min-width: 64px; min-height: 44px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #6A625A">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V21H3z"></path></svg>Home</a>
+    <a href="cases.html" style="min-width: 64px; min-height: 44px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #C45F00">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="14" x2="13" y2="14"></line></svg>Cases</a>
+    <a href="index.html" style="min-width: 64px; min-height: 44px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #6A625A">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M9 7V4h6v3"></path></svg>Appliances</a>
+  </nav>
+</div></div>
+</body>
+</html>

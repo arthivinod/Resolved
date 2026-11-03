@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your request is ready · Resolved v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#C45F00;text-decoration:none}a:hover{color:#8A4300}
+</style>
+<style>
+body{margin:0;min-height:100vh;background:#E9E2D4;display:flex;flex-direction:column;align-items:center;padding:56px 0 32px;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+.proto-bar{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;font-size:12px;color:#3D3830;background:#FFFFFFCC;border:1px solid #D4C8AC;border-radius:999px;padding:6px 12px;z-index:10;white-space:nowrap}
+.proto-bar a{color:#C45F00;font-weight:600;text-decoration:none}
+.phone{border-radius:32px;overflow:hidden;box-shadow:0 1px 0 #D4C8AC,0 20px 50px rgba(26,22,18,.18)}
+@media (max-width:480px){body{padding:0;background:#FBF6EC}.phone{border-radius:0;box-shadow:none}.proto-bar{display:none}}
+html.shot body{padding:0;align-items:flex-start;background:#FBF6EC}
+html.shot .proto-bar{display:none}
+html.shot .phone{border-radius:0;box-shadow:none}
+</style>
+<script>if (location.search.includes('shot')) document.documentElement.classList.add('shot');</script>
+</head>
+<body>
+<div class="proto-bar">Resolved v2 · clickable prototype · <a href="screens.html">All screens</a></div>
+<div class="phone"><div style="width: 390px; height: 844px; box-sizing: border-box; background: #FBF6EC; color: #1A1612; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="display: flex; align-items: center; gap: 8px; padding: 16px 12px 4px">
+    <a href="issue.html" aria-label="Back" style="width: 44px; height: 44px; display: grid; place-items: center; color: #1A1612">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </a>
+    <span style="font-size: 13px; font-weight: 600; color: #6A625A">Step 3 of 3 · Send it</span>
+  </header>
+
+  <section style="padding: 0 20px; display: flex; flex-direction: column; gap: 4px">
+    <h1 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em">Your request is ready</h1>
+    <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #6A625A">Model, warranty and invoice are already in it. Pick how it should sound.</p>
+  </section>
+
+  <section style="padding: 12px 20px 0; display: flex; flex-direction: column; gap: 8px" aria-label="Tone">
+    <div style="display: flex; gap: 6px; flex-wrap: wrap">
+      <button class="tone" data-tone="clear">Clear (suggested)</button>
+      <button class="tone" data-tone="firm">Firm</button>
+      <button class="tone" data-tone="short">Short</button>
+      <button class="tone" data-tone="formal">Formal, cites the law</button>
+    </div>
+    <span style="font-size: 12px; line-height: 1.45; color: #3D3830"><span id="hint"></span></span>
+  </section>
+
+  <section style="padding: 12px 20px 0; flex: 1; min-height: 0; display: flex">
+    <div style="flex: 1; min-height: 0; border-radius: 16px; background: #FFFFFF; border: 1px solid #E8DFCB; display: flex; flex-direction: column; overflow: hidden">
+      <div style="padding: 10px 16px; border-bottom: 1px solid #F1EADB; display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: #6A625A">
+        <span><strong style="color: #1A1612; font-weight: 600">To</strong> LG customer service (email)</span>
+        <span><strong style="color: #1A1612; font-weight: 600">Subject</strong> <span id="subject"></span></span>
+      </div>
+      <div style="flex: 1; min-height: 0; overflow: auto; padding: 12px 16px; font-size: 13px; line-height: 1.55; color: #1A1612; white-space: pre-line" id="body"></div>
+      <div style="padding: 8px 16px; border-top: 1px solid #F1EADB; display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+        <span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #F6EFE1; color: #3D3830">invoice.pdf</span>
+        <span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: #F6EFE1; color: #3D3830">model-sticker.jpg</span>
+        <button style="margin-left: auto; min-height: 36px; border: none; background: transparent; font-family: inherit; font-size: 12px; font-weight: 600; color: #C45F00">Edit text</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 12px 20px 20px; display: flex; flex-direction: column; gap: 8px">
+    <a href="track.html" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 14px; background: #C45F00; color: #FFFFFF; font-size: 15px; font-weight: 600">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+      Open in my email
+    </a>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <a href="track.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D4C8AC; color: #1A1612; font-size: 14px; font-weight: 600">WhatsApp</a>
+      <a href="track.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D4C8AC; color: #1A1612; font-size: 14px; font-weight: 600">Copy text</a>
+    </div>
+    <p style="margin: 0; font-size: 11px; line-height: 1.4; color: #6A625A; text-align: center">You send it from your own app. Resolved never sends on your behalf.</p>
+  </section>
+</div></div>
+<style>
+.tone{height:36px;padding:0 12px;border-radius:999px;border:1px solid #D4C8AC;background:#FFFFFF;color:#1A1612;font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+.tone[aria-pressed="true"]{border-color:#1A1612;background:#1A1612;color:#FFFFFF;font-weight:600}
+</style>
+<script>
+const TONES = {"clear": ["Best for a first message: calm, complete, easy to act on. Save firm for the follow-up.", "Washer not draining, in warranty, technician visit request", "Hello LG service team,\n\nMy LG front-load washer (8 kg) stopped draining on 30 Oct 2026. Water stays in the drum after every cycle. I have cleaned the drain filter and checked the hose for kinks; the problem continues.\n\nIt was bought on 12 Sep 2025 and is within warranty. Invoice and a photo of the model sticker are attached.\n\nPlease book a technician visit this week. I am available weekdays after 5 PM at the address on the invoice.\n\nThank you,\nMeera"], "firm": ["Sets a deadline and names the next step. Good when a first request was ignored.", "Washer not draining, in warranty: visit needed within 3 working days", "Hello LG service team,\n\nMy LG front-load washer (8 kg), bought on 12 Sep 2025 and within warranty, has not drained since 30 Oct 2026. I have already cleaned the drain filter and checked the hose; the fault is with the machine.\n\nPlease confirm a technician visit within 3 working days. Invoice and model sticker photo are attached.\n\nIf I do not hear back by Wed, 5 Nov, I will raise this with LG’s grievance officer.\n\nMeera"], "short": ["Fits a WhatsApp message or a support form with a character limit.", "Washer not draining (in warranty)", "Hi LG,\n\nMy front-load washer (8 kg, bought 12 Sep 2025, in warranty) stopped draining on 30 Oct. Filter cleaned, hose checked, still not draining.\n\nPlease book a technician this week. Invoice and sticker photo attached.\n\nThanks,\nMeera"], "formal": ["For a written record. Cites the defect definition in the Consumer Protection Act, 2019.", "Defective washing machine under warranty: request for repair", "Dear LG customer service,\n\nRe: LG front-load washing machine, 8 kg, purchased 12 Sep 2025 (invoice attached).\n\nSince 30 Oct 2026 the machine fails to drain. Basic checks (drain filter, hose) have not resolved it. The product is within its warranty period, and a fault of this kind is a defect as defined in Section 2(10) of the Consumer Protection Act, 2019.\n\nI request a technician visit, and repair or replacement under warranty, within 7 days.\n\nYours sincerely,\nMeera"]};
+function pick(id) {
+  const [hint, subject, body] = TONES[id];
+  document.getElementById('hint').textContent = hint;
+  document.getElementById('subject').textContent = subject;
+  document.getElementById('body').textContent = body;
+  document.querySelectorAll('.tone').forEach(b => b.setAttribute('aria-pressed', b.dataset.tone === id));
+}
+document.querySelectorAll('.tone').forEach(b => b.addEventListener('click', () => pick(b.dataset.tone)));
+pick('clear');
+</script>
+</body>
+</html>

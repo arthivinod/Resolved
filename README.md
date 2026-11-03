@@ -4,10 +4,18 @@
 
 Resolved helps people in India get a washing machine, AC, fridge or TV repaired through the brand's own service network, without hunting for the right number or explaining the model three times. You pick the brand, the model and what's wrong. Resolved hands you a complete request (model, serial, invoice date, warranty status, what you've already tried) and routes it to the right channel. If the brand goes quiet, it walks you up the escalation ladder, one approved step at a time.
 
-This repo holds two versions of the idea. v1, the code here, was a complaint-fighting agent. v2 is where the product is going, and right now it lives as a PRD and a clickable design.
+This repo holds two versions of the idea. v1 was a complaint-fighting agent, built as a React app. v2 is where the product is going: a PRD, plus a clickable web prototype in [`prototype/`](prototype/).
 
 - **v2 PRD:** [Resolved v2 — PRD](https://claude.ai/artifact/6ijsxYyqwnihhsWxXCXHyj)
-- **v2 clickable screens:** [Resolved v2 — Screens](https://claude.ai/artifact/17ZshGNnPUnfUyQvLLozqb) (12 artboards: two consumer journeys, case tracking, escalation, and the brand console)
+- **v2 prototype:** 12 clickable screens covering two consumer journeys, case tracking, escalation and the brand console ([run it locally](#run-the-v2-prototype))
+
+<p align="center">
+  <img src="docs/screenshots/v2-index.png" width="24%" alt="Home: search a brand or snap the model sticker" />
+  <img src="docs/screenshots/v2-issue.png" width="24%" alt="Pick the issue, with warranty status" />
+  <img src="docs/screenshots/v2-request.png" width="24%" alt="Drafted request with tone picker" />
+  <img src="docs/screenshots/v2-track.png" width="24%" alt="Track the case" />
+</p>
+<p align="center"><sub>Journey A · LG washer not draining, in warranty: home → issue → drafted request → tracking</sub></p>
 
 ---
 
@@ -29,7 +37,19 @@ And every durable goes through the same loop: raise a ticket, a technician visit
 4. Get a drafted request in the tone you want (clear, firm, short, or formal with the legal citation), and send it from your own email or WhatsApp. Resolved never sends on your behalf.
 5. Track it. If the brand misses its window, the next rung (reminder → nodal or grievance officer → National Consumer Helpline) is drafted and waits for your go-ahead.
 
+<p align="center">
+  <img src="docs/screenshots/v2-tvissue.png" width="24%" alt="Samsung TV: no picture, sound works" />
+  <img src="docs/screenshots/v2-tvoptions.png" width="24%" alt="Authorized service vs local repair" />
+  <img src="docs/screenshots/v2-cases.png" width="24%" alt="All cases" />
+  <img src="docs/screenshots/v2-escalate.png" width="24%" alt="Escalation that waits for consent" />
+</p>
+<p align="center"><sub>Journey B · Samsung TV out of warranty, where people drift to unverified repair · plus the cases list and an escalation waiting for consent</sub></p>
+
 **For the brand**
+
+<p align="center">
+  <img src="docs/screenshots/v2-console.png" width="90%" alt="Brand console: issue clusters by model, inbox sorted by SLA, public response badge" />
+</p>
 
 Every brand is listed from day one using public channels. Brands that opt in get requests first, as structured tickets in their own queue, plus issue clusters by model ("42 requests for WM-FL7 not draining, mostly at 12 to 15 months") and a public "usually responds in X days" badge built from real resolution data. Brands pay for the console. Consumers never pay.
 
@@ -57,6 +77,16 @@ Being straight about what it is:
 - **Nothing is sent anywhere.** Filing, posting and calling are simulated.
 
 React 18 + Vite, a hand-built light/dark design system on CSS custom properties, no UI library.
+
+### Run the v2 prototype
+
+Plain HTML, nothing to install:
+
+```bash
+python3 -m http.server 5180 --directory prototype
+```
+
+Open `http://localhost:5180/screens.html` for every screen by journey, or start at `http://localhost:5180/` and tap through.
 
 ### Run v1 locally
 
