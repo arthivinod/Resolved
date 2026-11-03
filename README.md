@@ -1,77 +1,72 @@
 # Resolved
 
-**They have AI to deny your complaint. Now you have AI to fight back.**
+**Appliance broke? Get it to the people who can actually fix it.**
+
+Resolved helps people in India get a washing machine, AC, fridge or TV repaired through the brand's own service network, without hunting for the right number or explaining the model three times. You pick the brand, the model and what's wrong. Resolved hands you a complete request (model, serial, invoice date, warranty status, what you've already tried) and routes it to the right channel. If the brand goes quiet, it walks you up the escalation ladder, one approved step at a time.
+
+This repo holds two versions of the idea. v1, the code here, was a complaint-fighting agent. v2 is where the product is going, and right now it lives as a PRD and a clickable design.
+
+- **v2 PRD:** [Resolved v2 — PRD](https://claude.ai/artifact/6ijsxYyqwnihhsWxXCXHyj)
+- **v2 clickable screens:** [Resolved v2 — Screens](https://claude.ai/artifact/17ZshGNnPUnfUyQvLLozqb) (12 artboards: two consumer journeys, case tracking, escalation, and the brand console)
 
 ---
 
-## What this is
+## Why v2 exists
 
-Companies run AI at the front line of customer support — chatbots trained to stall, deflect, and quietly close tickets before a human ever reads them. Resolved flips that asymmetry.
+v1 assumed the enemy was the support bot. Building it, I kept running into a different problem: for appliances, people mostly don't need a lawyer-ish letter. They need to reach the authorized service centre, with the right facts, before they give up and call a local repair guy.
 
-Drop in a photo of a broken order, a screenshot of an overcharge, a forwarded email about a delayed delivery — any format, no cleanup required. Resolved reads it, builds a legally-grounded case, and pushes it through every escalation channel until someone with authority to pay you actually looks at it.
+That shortcut has a cost. Out of warranty especially, people end up with neighbourhood shops or app-based repair services that are quick to book but may fit non-original parts, void what's left of a panel warranty, and leave no service record. The brand loses the customer, the parts revenue and the defect signal. People don't pick that route because they prefer it. They pick it because the authorized path is hard to find and slow to start.
 
-It's not a chatbot that helps you phrase a nicer email. It's an agent that runs the whole complaint lifecycle — extraction, strategy, drafting, escalation — so the fight is over before you've opened a second tab.
+And every durable goes through the same loop: raise a ticket, a technician visits, diagnosis, part, repair, close. Standardise the front of that loop and one product works across every brand.
+
+## How v2 works
+
+**For the consumer**
+
+1. Search a brand, or snap the model sticker or invoice.
+2. Confirm the facts and see the warranty status.
+3. Pick the problem from a short, plain-language list ("not draining", "no picture, sound works").
+4. Get a drafted request in the tone you want (clear, firm, short, or formal with the legal citation), and send it from your own email or WhatsApp. Resolved never sends on your behalf.
+5. Track it. If the brand misses its window, the next rung (reminder → nodal or grievance officer → National Consumer Helpline) is drafted and waits for your go-ahead.
+
+**For the brand**
+
+Every brand is listed from day one using public channels. Brands that opt in get requests first, as structured tickets in their own queue, plus issue clusters by model ("42 requests for WM-FL7 not draining, mostly at 12 to 15 months") and a public "usually responds in X days" badge built from real resolution data. Brands pay for the console. Consumers never pay.
+
+**Where AI fits, and where it doesn't**
+
+Routing, templates and legal wording are structured data, because they need to be right every time and they cost nothing to run. AI is used where text input is genuinely worse: reading a photo of a model sticker or invoice, mapping a free-text "something else" problem to a known issue, and clustering defects for brands.
+
+---
+
+## v1: what's in this repo
+
+v1 is a React prototype of the earlier idea: an agent that fights back when companies use AI to stall complaints.
 
 <p align="center">
-  <img src="design-exports/Hackathon/screenshots/home-after-light.png" width="45%" alt="Resolved — Home screen, light mode" />
-  <img src="design-exports/Hackathon/screenshots/home-after-dark.png" width="45%" alt="Resolved — Home screen, dark mode" />
+  <img src="design-exports/Hackathon/screenshots/home-after-light.png" width="45%" alt="Resolved v1, home screen, light mode" />
+  <img src="design-exports/Hackathon/screenshots/home-after-dark.png" width="45%" alt="Resolved v1, home screen, dark mode" />
 </p>
 
----
+The flow: capture evidence → extracted facts (with partial and could-not-read states) → strategy (tone, legal hook, demand) → four output formats (letter, tweet, call script, court filing) with reword, copy and share → a five-rung escalation ladder where every step needs explicit consent, with an opt-in auto-pilot → a dashboard of cases.
 
-## Why now
+Being straight about what it is:
 
-India has 250–350M+ online shoppers, and quick-commerce's 10–15 minute delivery promise is generating complaints faster than anyone can review them. Almost none of those complaints go anywhere — the formal path (National Consumer Helpline → e-Daakhil → consumer court) is slow enough that courts are sitting on a backlog of hundreds of thousands of cases, some taking years to close.
+- **All data is staged.** One sample case runs through the whole flow. There are no live model calls in this code.
+- **Progress survives a refresh** (saved in the browser). No backend, no accounts.
+- **Nothing is sent anywhere.** Filing, posting and calling are simulated.
 
-Meanwhile companies are quietly automating the other side: AI chatbots built to stall and deflect at scale. That's the asymmetry Resolved exists to close — for now, only one side of this fight has AI.
+React 18 + Vite, a hand-built light/dark design system on CSS custom properties, no UI library.
 
-The model isn't unproven, just unbuilt here. Voxya already runs a paid, human-powered version of this in India. DoNotPay proved "AI fights bureaucracy for you" as a business in the US. Nobody's built the AI-native version for Indian consumer law yet.
-
----
-
-## How it works
-
-1. **Extract.** Drop in a photo, screenshot, or forwarded email. Claude's vision model pulls the vendor, order ID, amount, issue, severity, and timestamp straight off the evidence — no forms, no formatting rules.
-2. **Strategize.** Resolved picks a vendor-specific play: the right channel, the right tone, and the exact clause of Indian consumer law to cite — e.g. Consumer Protection Act 2019 §2(11).
-3. **Draft.** A firm, law-cited complaint letter streams in live via the Claude API, ready to send or edit.
-4. **Escalate.** Ignored? Resolved climbs a five-step ladder on its own: vendor channel → public post → grievance officer → National Consumer Helpline → e-Daakhil consumer court. Zero further effort from you.
-
-<!-- ADD SCREENSHOT: Capture screen (the evidence-upload step) here -->
-<!-- ADD SCREENSHOT: Extracting screen (the pulsing-orb AI-reading state) here -->
-<!-- ADD SCREENSHOT: Filed screen (the escalation ladder) here -->
-<!-- Drop the three PNGs into design-exports/Hackathon/screenshots/ and swap these comments for
-     ![Capture](...) / ![Extracting](...) / ![Filed](...) image tags, same pattern as above. -->
-
----
-
-## Tech
-
-React 18 + Vite. Claude API for vision-based fact extraction and streaming text generation. A full light/dark design system built on CSS custom properties — no UI framework, no component library.
-
----
-
-## Current state
-
-This is a front-end prototype, and the scope is deliberate, not accidental:
-
-- **Two real AI integrations are live** — photo-to-facts extraction and complaint drafting both run against the Claude API.
-- **Everything else is staged.** Strategy selection, escalation, and the dashboard run on fallback data so the demo never breaks mid-pitch.
-- **No backend, no auth, no persistence.** State lives in React; refresh resets the app.
-- **No real vendor or regulator integrations yet.** Filing, posting, and calling are simulated end states, not live actions.
-
-That's the next build — not a gap nobody noticed.
-
----
-
-## Run it locally
+### Run v1 locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. You'll need a `.env.local` with `VITE_ANTHROPIC_API_KEY=...` for the two live Claude calls to work.
+Open `http://localhost:5173`. No API key needed.
 
 ---
 
-Built by Arthi Vinod, product manager exploring AI product-building hands-on. [github.com/arthivinod](https://github.com/arthivinod)
+Built by [Arthi Vinod](https://arthivinod.github.io/myWebsite/), product manager working on AI products.
